@@ -1,0 +1,158 @@
+package Hotel.Reservation.System;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class Login extends JFrame implements ActionListener{
+
+    JTextField usernameField;
+    JPasswordField passwordField;
+    JButton login,cancel,registration;
+
+    Login(){
+
+        JLabel usernameLabel = new JLabel("Username");
+        usernameLabel.setBounds(131,220,200,40);
+        usernameLabel.setFont(new Font("Arial",Font.BOLD,32));
+        usernameLabel.setForeground(Color.WHITE);
+        add(usernameLabel);
+
+        JLabel passwordLabel = new JLabel("Password");
+        passwordLabel.setBounds(131,385,200,40);
+        passwordLabel.setFont(new Font("Arial",Font.BOLD,32));
+        passwordLabel.setForeground(Color.WHITE);
+        add(passwordLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(331,220,200,40);
+        usernameField.setFont(new Font("Arial",Font.PLAIN,32));
+        usernameField.setForeground(Color.WHITE);
+        usernameField.setBackground(Color.BLACK);
+        add(usernameField);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(331,385,200,40);
+        passwordField.setFont(new Font("Arial",Font.PLAIN,32));
+        passwordField.setForeground(Color.WHITE);
+        passwordField.setBackground(Color.BLACK);
+        add(passwordField);
+
+
+        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/Logo.png"));
+        Image scaledImage = imageIcon.getImage().getScaledInstance(455, 500, Image.SCALE_DEFAULT);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        JLabel label = new JLabel(scaledIcon);
+        label.setBounds(531,100,455,500);
+        add(label);
+
+        login = new JButton("Login");
+        login.setBounds(131,610,240,60);
+        login.setFont(new Font("Arial",Font.BOLD,32));
+        login.setForeground(Color.WHITE);
+        login.setBackground(new Color(235,173,51));
+        login.addActionListener(this);
+        add(login);
+
+        cancel = new JButton("Cancel");
+        cancel.setBounds(391,610,240,60);
+        cancel.setFont(new Font("Arial",Font.BOLD,32));
+        cancel.setForeground(Color.WHITE);
+        cancel.setBackground(new Color(235,173,51));
+        cancel.addActionListener(this);
+        add(cancel);
+
+        registration = new JButton("Registration");
+        registration.setBounds(651,610,240,60);
+        registration.setFont(new Font("Arial",Font.BOLD,32));
+        registration.setForeground(Color.WHITE);
+        registration.setBackground(new Color(235,173,51));
+        registration.addActionListener(this);
+        add(registration);
+
+
+        getContentPane().setBackground(Color.BLACK);
+
+        setLayout(null);
+        setLocation(Welcome.X_POSITION, Welcome.Y_POSITION);
+        setSize(Welcome.WINDOW_WIDTH, Welcome.WINDOW_HEIGHT);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == login){
+            loginUser();
+        } else if(e.getSource() == registration){
+            new Registration();
+            setVisible(false);
+        } else{
+            System.exit(0);
+        }
+    }
+
+    private void loginUser() {
+
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword());
+
+        if(username.isEmpty() || password.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Please enter username and password!","Login Error",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean loginSuccessful = false;
+        String userRole = "";
+
+        try{
+
+            File file = new File("users.txt");
+
+            if(file.exists()){
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                String line;
+                while((line = reader.readLine()) != null){
+                    String[] data = line.split("\\|");
+                    if(data.length == 4){
+                        if(data[0].equals(username) && data[2].equals(password)){
+                            loginSuccessful = true;
+                            userRole = data[3];
+                            break;
+                        }
+                    }
+                }
+                reader.close();
+            }
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        if(loginSuccessful){
+            JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
+
+            setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(this,"Invalid username or password!","Login Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args){
+        new Login();
+    }
+
+}
