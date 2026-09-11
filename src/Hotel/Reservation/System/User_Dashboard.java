@@ -27,14 +27,14 @@ public class User_Dashboard extends JFrame {
         label.setBounds(0,0,800,Welcome.WINDOW_HEIGHT);
         rightPanel.add(label);
 
-        JButton newCustomerForm = new JButton("New Customer Form");
-        newCustomerForm.setBounds(30,30,200,30);
-        newCustomerForm.setFont(new Font("Arial",Font.BOLD,16));
-        newCustomerForm.setForeground(Color.WHITE);
-        newCustomerForm.setBackground(Color.BLACK);
-        newCustomerForm.setFocusPainted(false);
-        leftPanel.add(newCustomerForm);
-        newCustomerForm.addActionListener(new ActionListener() {
+        JButton searchRooms = new JButton("Search Rooms");
+        searchRooms.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE,Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        searchRooms.setFont(new Font("Arial",Font.BOLD,16));
+        searchRooms.setForeground(Color.WHITE);
+        searchRooms.setBackground(Color.BLACK);
+        searchRooms.setFocusPainted(false);
+        leftPanel.add(searchRooms);
+        searchRooms.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -45,13 +45,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton room = new JButton("Room");
-        room.setBounds(30,70,200,30);
-        room.setFont(new Font("Arial",Font.BOLD,16));
-        room.setForeground(Color.WHITE);
-        room.setBackground(Color.BLACK);
-        leftPanel.add(room);
-        room.addActionListener(new ActionListener() {
+        JButton viewRooms = new JButton("View Rooms");
+        viewRooms.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(1*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        viewRooms.setFont(new Font("Arial",Font.BOLD,16));
+        viewRooms.setForeground(Color.WHITE);
+        viewRooms.setBackground(Color.BLACK);
+        leftPanel.add(viewRooms);
+        viewRooms.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -62,13 +62,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton department = new JButton("Department");
-        department.setBounds(30,110,200,30);
-        department.setFont(new Font("Arial",Font.BOLD,16));
-        department.setForeground(Color.WHITE);
-        department.setBackground(Color.BLACK);
-        leftPanel.add(department);
-        department.addActionListener(new ActionListener() {
+        JButton makeReservation = new JButton("Make Reservation");
+        makeReservation.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(2*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        makeReservation.setFont(new Font("Arial",Font.BOLD,16));
+        makeReservation.setForeground(Color.WHITE);
+        makeReservation.setBackground(Color.BLACK);
+        leftPanel.add(makeReservation);
+        makeReservation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -79,13 +79,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton allEmployeeInfo = new JButton("All Employee Info");
-        allEmployeeInfo.setBounds(30,150,200,30);
-        allEmployeeInfo.setFont(new Font("Arial",Font.BOLD,16));
-        allEmployeeInfo.setForeground(Color.WHITE);
-        allEmployeeInfo.setBackground(Color.BLACK);
-        leftPanel.add(allEmployeeInfo);
-        allEmployeeInfo.addActionListener(new ActionListener() {
+        JButton myReservations = new JButton("My Reservations");
+        myReservations.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(3*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        myReservations.setFont(new Font("Arial",Font.BOLD,16));
+        myReservations.setForeground(Color.WHITE);
+        myReservations.setBackground(Color.BLACK);
+        leftPanel.add(myReservations);
+        myReservations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -96,13 +96,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton customerInfo = new JButton("Customer Info");
-        customerInfo.setBounds(30,190,200,30);
-        customerInfo.setFont(new Font("Arial",Font.BOLD,16));
-        customerInfo.setForeground(Color.WHITE);
-        customerInfo.setBackground(Color.BLACK);
-        leftPanel.add(customerInfo);
-        customerInfo.addActionListener(new ActionListener() {
+        JButton cancelReservation = new JButton("Cancel Reservation");
+        cancelReservation.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(4*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        cancelReservation.setFont(new Font("Arial",Font.BOLD,16));
+        cancelReservation.setForeground(Color.WHITE);
+        cancelReservation.setBackground(Color.BLACK);
+        leftPanel.add(cancelReservation);
+        cancelReservation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -113,13 +113,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton managerInfo = new JButton("Manager Info");
-        managerInfo.setBounds(30,230,200,30);
-        managerInfo.setFont(new Font("Arial",Font.BOLD,16));
-        managerInfo.setForeground(Color.WHITE);
-        managerInfo.setBackground(Color.BLACK);
-        leftPanel.add(managerInfo);
-        managerInfo.addActionListener(new ActionListener() {
+        JButton payment = new JButton("Payment");
+        payment.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(5*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        payment.setFont(new Font("Arial",Font.BOLD,16));
+        payment.setForeground(Color.WHITE);
+        payment.setBackground(Color.BLACK);
+        leftPanel.add(payment);
+        payment.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -130,13 +130,13 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton checkOut = new JButton("Check Out");
-        checkOut.setBounds(30,270,200,30);
-        checkOut.setFont(new Font("Arial",Font.BOLD,16));
-        checkOut.setForeground(Color.WHITE);
-        checkOut.setBackground(Color.BLACK);
-        leftPanel.add(checkOut);
-        checkOut.addActionListener(new ActionListener() {
+        JButton myPortfolio = new JButton("My Portfolio");
+        myPortfolio.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(6*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        myPortfolio.setFont(new Font("Arial",Font.BOLD,16));
+        myPortfolio.setForeground(Color.WHITE);
+        myPortfolio.setBackground(Color.BLACK);
+        leftPanel.add(myPortfolio);
+        myPortfolio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
@@ -147,68 +147,35 @@ public class User_Dashboard extends JFrame {
             }
         });
 
-        JButton updateCheckIn = new JButton("Update Check-In Details");
-        updateCheckIn.setBounds(30,310,200,30);
-        updateCheckIn.setFont(new Font("Arial",Font.BOLD,12));
-        updateCheckIn.setForeground(Color.WHITE);
-        updateCheckIn.setBackground(Color.BLACK);
-        leftPanel.add(updateCheckIn);
-        updateCheckIn.addActionListener(new ActionListener() {
+        JButton logout = new JButton("Logout");
+        logout.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(7*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        logout.setFont(new Font("Arial",Font.BOLD,16));
+        logout.setForeground(Color.WHITE);
+        logout.setBackground(Color.BLACK);
+        leftPanel.add(logout);
+        logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Login();
+                    setVisible(false);
                 } catch(Exception e){
                     e.printStackTrace();
                 }
             }
         });
 
-        JButton updateRoomStatus = new JButton("Update Room Status");
-        updateRoomStatus.setBounds(30,350,200,30);
-        updateRoomStatus.setFont(new Font("Arial",Font.BOLD,16));
-        updateRoomStatus.setForeground(Color.WHITE);
-        updateRoomStatus.setBackground(Color.BLACK);
-        leftPanel.add(updateRoomStatus);
-        updateRoomStatus.addActionListener(new ActionListener() {
+        JButton exit = new JButton("Exit");
+        exit.setBounds(Admin_Dashboard.LABEL_X_POSITION,Admin_Dashboard.DISTANCE+(8*Admin_Dashboard.DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        exit.setFont(new Font("Arial",Font.BOLD,16));
+        exit.setForeground(Color.WHITE);
+        exit.setBackground(Color.BLACK);
+        leftPanel.add(exit);
+        exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
-                } catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        JButton pickUpService = new JButton("Pick Up Service");
-        pickUpService.setBounds(30,390,200,30);
-        pickUpService.setFont(new Font("Arial",Font.BOLD,16));
-        pickUpService.setForeground(Color.WHITE);
-        pickUpService.setBackground(Color.BLACK);
-        leftPanel.add(pickUpService);
-        pickUpService.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent aE){
-                try{
-
-                } catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        JButton searchRoom = new JButton("Search Room");
-        searchRoom.setBounds(30,430,200,30);
-        searchRoom.setFont(new Font("Arial",Font.BOLD,16));
-        searchRoom.setForeground(Color.WHITE);
-        searchRoom.setBackground(Color.BLACK);
-        leftPanel.add(searchRoom);
-        searchRoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent aE){
-                try{
-
+                    System.exit(0);
                 } catch(Exception e){
                     e.printStackTrace();
                 }

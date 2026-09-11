@@ -9,8 +9,12 @@ public class Welcome extends JFrame {
     public static final int WINDOW_HEIGHT = 768;
     public static final int X_POSITION = 448;
     public static final int Y_POSITION = 156;
+    public static final int STARTING_TIME = 2000;
 
     Welcome(){
+
+        setUndecorated(true);
+
         ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/Welcome.png"));
         Image scaledImage = imageIcon.getImage().getScaledInstance(WINDOW_WIDTH, WINDOW_HEIGHT, Image.SCALE_DEFAULT);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -24,7 +28,7 @@ public class Welcome extends JFrame {
         setVisible(true);
 
         try{
-            Timer timer = new Timer(3000, e -> {
+            Timer timer = new Timer(STARTING_TIME, e -> {
                 new Login();
                 setVisible(false);
             });

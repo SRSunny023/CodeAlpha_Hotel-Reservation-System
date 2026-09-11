@@ -73,21 +73,6 @@ public class Registration extends JFrame implements ActionListener {
         confirmPasswordField.setBackground(Color.BLACK);
         add(confirmPasswordField);
 
-        JLabel roleLabel = new JLabel("Role");
-        roleLabel.setBounds(131,440,220,40);
-        roleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        roleLabel.setForeground(Color.WHITE);
-        add(roleLabel);
-
-        String[] roles = { "User", "Admin" };
-
-        roleBox = new JComboBox<>(roles);
-        roleBox.setBounds(400,440,150,40);
-        roleBox.setFont(new Font("Arial", Font.PLAIN, 22));
-        roleBox.setBackground(Color.BLACK);
-        roleBox.setForeground(Color.WHITE);
-        add(roleBox);
-
         register = new JButton("Register");
         register.setBounds(200,570,250,60);
         register.setFont(new Font("Arial", Font.BOLD, 28));
@@ -112,6 +97,7 @@ public class Registration extends JFrame implements ActionListener {
         add(label);
 
         getContentPane().setBackground(Color.BLACK);
+
         setLayout(null);
         setLocation( Welcome.X_POSITION, Welcome.Y_POSITION);
         setSize( Welcome.WINDOW_WIDTH, Welcome.WINDOW_HEIGHT);
@@ -139,7 +125,7 @@ public class Registration extends JFrame implements ActionListener {
         String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
-        String role = (String) roleBox.getSelectedItem();
+        String role = "User";
 
         if(username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
 

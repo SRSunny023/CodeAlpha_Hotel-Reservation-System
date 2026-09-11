@@ -133,7 +133,7 @@ public class Login extends JFrame implements ActionListener{
             JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
             if(userRole.contains("User")){
                 new User_Dashboard();
-            } else if(userRole=="Admin"){
+            } else if(userRole.contains("Admin")){
                 new Admin_Dashboard();
             }
             setVisible(false);
