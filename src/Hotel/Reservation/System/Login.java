@@ -1,28 +1,15 @@
 package Hotel.Reservation.System;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
 
 public class Login extends JFrame implements ActionListener{
 
     JTextField usernameField;
     JPasswordField passwordField;
-    JButton login,cancel,registration;
+    JButton login,exit,registration;
 
     Login(){
 
@@ -68,13 +55,13 @@ public class Login extends JFrame implements ActionListener{
         login.addActionListener(this);
         add(login);
 
-        cancel = new JButton("Cancel");
-        cancel.setBounds(391,610,240,60);
-        cancel.setFont(new Font("Arial",Font.BOLD,32));
-        cancel.setForeground(Color.WHITE);
-        cancel.setBackground(new Color(235,173,51));
-        cancel.addActionListener(this);
-        add(cancel);
+        exit = new JButton("Exit");
+        exit.setBounds(391,610,240,60);
+        exit.setFont(new Font("Arial",Font.BOLD,32));
+        exit.setForeground(Color.WHITE);
+        exit.setBackground(new Color(235,173,51));
+        exit.addActionListener(this);
+        add(exit);
 
         registration = new JButton("Registration");
         registration.setBounds(651,610,240,60);
@@ -144,7 +131,11 @@ public class Login extends JFrame implements ActionListener{
 
         if(loginSuccessful){
             JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
-
+            if(userRole.contains("User")){
+                new User_Dashboard();
+            } else if(userRole=="Admin"){
+                new Admin_Dashboard();
+            }
             setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this,"Invalid username or password!","Login Error",JOptionPane.ERROR_MESSAGE);
