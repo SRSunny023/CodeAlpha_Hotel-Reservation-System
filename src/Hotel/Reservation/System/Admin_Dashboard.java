@@ -2,6 +2,8 @@ package Hotel.Reservation.System;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+
 import javax.swing.*;
 
 public class Admin_Dashboard extends JFrame {
@@ -163,6 +165,9 @@ public class Admin_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
+                    FileWriter fw = new FileWriter("currentSession.txt");
+                    fw.write("");
+                    fw.close();
                     setVisible(false);
                     new Login();
                 } catch(Exception e){

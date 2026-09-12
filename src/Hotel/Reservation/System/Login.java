@@ -133,6 +133,16 @@ public class Login extends JFrame implements ActionListener{
         if(loginSuccessful){
             JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
+            try{
+                FileWriter fw = new FileWriter("currentSession.txt");
+                String line = username + "|" + userRole;
+                fw.write(line);
+                fw.close();
+
+            } catch(IOException e){
+                JOptionPane.showMessageDialog(this,"Login failed! currentSession.txt not found","Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if(userRole.contains("User")){
                 new User_Dashboard();
             } else if(userRole.contains("Admin")){

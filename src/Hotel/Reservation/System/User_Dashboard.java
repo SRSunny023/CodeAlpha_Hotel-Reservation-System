@@ -2,6 +2,8 @@ package Hotel.Reservation.System;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+
 import javax.swing.*;
 
 public class User_Dashboard extends JFrame {
@@ -55,7 +57,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Make_Reservation();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -106,7 +108,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Payment(-1);
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -123,7 +125,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new My_Portfolio();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -140,6 +142,9 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
+                    FileWriter fw = new FileWriter("currentSession.txt");
+                    fw.write("");
+                    fw.close();
                     setVisible(false);
                     new Login();
                 } catch(Exception e){

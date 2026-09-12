@@ -1,6 +1,8 @@
 package Hotel.Reservation.System;
 
 import java.awt.*;
+import java.io.*;
+
 import javax.swing.*;
 
 public class Welcome extends JFrame {
@@ -29,7 +31,25 @@ public class Welcome extends JFrame {
         try{
             Timer timer = new Timer(STARTING_TIME, e -> {
                 setVisible(false);
-                new Login();
+                try{
+
+                    BufferedReader br = new BufferedReader(new FileReader("currentSession.txt"));
+                    String line = br.readLine();
+                    if(line==null){
+                        new Login();
+                    }
+                    String[] parts = line.split("\\|");
+                    String userRole = parts[1];
+                    if(userRole.equals("User")){
+                        new User_Dashboard();
+                    } else{
+                        new Admin_Dashboard();
+                    }
+                    br.close();
+
+                } catch(Exception ex){
+                    return;
+                }
             });
 
             timer.setRepeats(false);

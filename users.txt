@@ -1,2 +1,2 @@
 admin|admin@gmail.com|admin|Admin
-user|user@gmail.com|user|User
+user1|user1@gmail.com|user1|User

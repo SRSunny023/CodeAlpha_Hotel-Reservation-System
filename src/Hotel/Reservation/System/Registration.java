@@ -155,15 +155,18 @@ public class Registration extends JFrame implements ActionListener {
         try{
 
             FileWriter writer = new FileWriter("users.txt",true);
-
             writer.write(username + "|" + email + "|" + password + "|" + role + "\n");
             writer.close();
 
+            FileWriter fw = new FileWriter("userProfile.txt", true);
+            fw.write(username + "|" + "" + "|" + "" + "|" + "" + "|" + "");
+            fw.close();
+
             JOptionPane.showMessageDialog(this,"Registration Successful!","Success",JOptionPane.INFORMATION_MESSAGE);
 
-            new Login();
-
             setVisible(false);
+
+            new Login();
 
 
         } catch (IOException e){
