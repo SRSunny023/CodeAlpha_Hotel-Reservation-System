@@ -75,6 +75,7 @@ public class Login extends JFrame implements ActionListener{
         getContentPane().setBackground(Color.BLACK);
 
         setLayout(null);
+        setUndecorated(true);
         setLocation(Welcome.X_POSITION, Welcome.Y_POSITION);
         setSize(Welcome.WINDOW_WIDTH, Welcome.WINDOW_HEIGHT);
         setVisible(true);
@@ -85,8 +86,8 @@ public class Login extends JFrame implements ActionListener{
         if(e.getSource() == login){
             loginUser();
         } else if(e.getSource() == registration){
-            new Registration();
             setVisible(false);
+            new Registration();
         } else{
             System.exit(0);
         }
@@ -131,12 +132,12 @@ public class Login extends JFrame implements ActionListener{
 
         if(loginSuccessful){
             JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
             if(userRole.contains("User")){
                 new User_Dashboard();
             } else if(userRole.contains("Admin")){
                 new Admin_Dashboard();
             }
-            setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this,"Invalid username or password!","Login Error",JOptionPane.ERROR_MESSAGE);
         }

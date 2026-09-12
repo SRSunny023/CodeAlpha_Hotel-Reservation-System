@@ -151,47 +151,31 @@ public class Manage_Users extends JFrame {
 
     private boolean updateUserRole(String username,String newRole) {
 
-        File inputFile = new File("users.txt");
-        File tempFile = new File("user_temp.txt");
-
         boolean updated = false;
 
         try {
-
-            BufferedReader br = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+            StringBuilder content = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
-
                 if (line.trim().isEmpty()) {
                     continue;
                 }
-
                 String[] data = line.split("\\|");
-
                 if (data.length >= 4 && data[0].equals(username)) {
-
                     line = data[0] + "|" + data[1] + "|" + data[2] + "|" + newRole;
                     updated = true;
                 }
-
-                bw.write(line);
-                bw.newLine();
+                content.append(line);
+                content.append(System.lineSeparator());
             }
 
             br.close();
-            bw.close();
 
-            if (updated) {
-
-                if (!inputFile.delete()) {
-                    return false;
-                }
-
-                if (!tempFile.renameTo(inputFile)) {
-                    return false;
-                }
-
+            if(updated){
+                FileWriter fw = new FileWriter("users.txt");
+                fw.write(content.toString());
+                fw.close();
                 return true;
             }
 

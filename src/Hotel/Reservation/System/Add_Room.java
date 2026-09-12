@@ -164,8 +164,8 @@ public class Add_Room extends JFrame {
 
         setUndecorated(true);
         setLayout(null);
-        setLocation(Welcome.X_POSITION + 280, Welcome.Y_POSITION + 38);
-        setSize(745, 731);
+        setLocation(Welcome.X_POSITION + 280,Welcome.Y_POSITION + 2);
+        setSize(745, 767);
         setVisible(true);
 
     }

@@ -99,6 +99,7 @@ public class Registration extends JFrame implements ActionListener {
         getContentPane().setBackground(Color.BLACK);
 
         setLayout(null);
+        setUndecorated(true);
         setLocation( Welcome.X_POSITION, Welcome.Y_POSITION);
         setSize( Welcome.WINDOW_WIDTH, Welcome.WINDOW_HEIGHT);
         setVisible(true);
@@ -108,14 +109,10 @@ public class Registration extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e){
 
         if(e.getSource() == register){
-
             registerUser();
-
         } else if(e.getSource() == back){
-
-            new Login();
             setVisible(false);
-
+            new Login();
         }
     }
 
