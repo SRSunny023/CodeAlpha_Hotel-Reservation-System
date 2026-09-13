@@ -118,6 +118,11 @@ public class Manage_Room extends JFrame {
                     return;
                 }
                 String roomNumber = model.getValueAt(selectedRow,0).toString();
+                String availability = model.getValueAt(selectedRow, 4).toString();
+                if (availability.equalsIgnoreCase("Occupied")) {
+                    JOptionPane.showMessageDialog(Manage_Room.this,"Occupied rooms cannot be edited!","Warning",JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 setVisible(false);
                 new Edit_Room(roomNumber);
             }

@@ -96,25 +96,7 @@ public class Admin_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
-                } catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        JButton customerInformation = new JButton("Customer Info");
-        customerInformation.setBounds(LABEL_X_POSITION,DISTANCE+(4*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
-        customerInformation.setFont(new Font("Arial",Font.BOLD,16));
-        customerInformation.setForeground(Color.WHITE);
-        customerInformation.setBackground(Color.BLACK);
-        customerInformation.setFocusPainted(false);
-        leftPanel.add(customerInformation);
-        customerInformation.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent aE){
-                try{
-
+                    new All_Reservation();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -122,7 +104,7 @@ public class Admin_Dashboard extends JFrame {
         });
 
         JButton paymentRecords = new JButton("Payment Records");
-        paymentRecords.setBounds(LABEL_X_POSITION,DISTANCE+(5*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        paymentRecords.setBounds(LABEL_X_POSITION,DISTANCE+(4*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
         paymentRecords.setFont(new Font("Arial",Font.BOLD,16));
         paymentRecords.setForeground(Color.WHITE);
         paymentRecords.setBackground(Color.BLACK);
@@ -131,7 +113,7 @@ public class Admin_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Payment_Record();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -139,7 +121,7 @@ public class Admin_Dashboard extends JFrame {
         });
 
         JButton reports = new JButton("Reports");
-        reports.setBounds(LABEL_X_POSITION,DISTANCE+(6*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        reports.setBounds(LABEL_X_POSITION,DISTANCE+(5*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
         reports.setFont(new Font("Arial",Font.BOLD,16));
         reports.setForeground(Color.WHITE);
         reports.setBackground(Color.BLACK);
@@ -148,7 +130,7 @@ public class Admin_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Report();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -156,7 +138,7 @@ public class Admin_Dashboard extends JFrame {
         });
 
         JButton logout = new JButton("Logout");
-        logout.setBounds(LABEL_X_POSITION,DISTANCE+(7*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        logout.setBounds(LABEL_X_POSITION,DISTANCE+(6*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
         logout.setFont(new Font("Arial",Font.BOLD,16));
         logout.setForeground(Color.WHITE);
         logout.setBackground(Color.BLACK);
@@ -177,7 +159,7 @@ public class Admin_Dashboard extends JFrame {
         });
 
         JButton exit = new JButton("Exit");
-        exit.setBounds(LABEL_X_POSITION,DISTANCE+(8*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
+        exit.setBounds(LABEL_X_POSITION,DISTANCE+(7*DISTANCE_GAP),Add_Room.LABEL_WIDTH,Add_Room.LABEL_HEIGHT);
         exit.setFont(new Font("Arial",Font.BOLD,16));
         exit.setForeground(Color.WHITE);
         exit.setBackground(Color.BLACK);

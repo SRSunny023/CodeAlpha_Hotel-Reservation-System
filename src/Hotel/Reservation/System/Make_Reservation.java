@@ -38,6 +38,8 @@ public class Make_Reservation extends JFrame {
         categoryBox.setBounds(200, 155, 180, 30);
         categoryBox.setFont(new Font("Arial", Font.PLAIN, 16));
         categoryBox.setEditable(false);
+        add(categoryBox);
+        categoryBox.setVisible(false);
 
         JLabel bedLabel = new JLabel("Bed Type:");
         bedLabel.setBounds(40, 210, 150, 30);
@@ -50,6 +52,8 @@ public class Make_Reservation extends JFrame {
         bedBox.setBounds(200, 210, 180, 30);
         bedBox.setFont(new Font("Arial", Font.PLAIN, 16));
         bedBox.setEditable(false);
+        add(bedBox);
+        bedBox.setVisible(false);
 
         JLabel priceLabel = new JLabel("Price:");
         priceLabel.setBounds(40, 265, 150, 30);
@@ -62,6 +66,8 @@ public class Make_Reservation extends JFrame {
         priceField.setBounds(200, 265, 180, 30);
         priceField.setFont(new Font("Arial", Font.PLAIN, 18));
         priceField.setEditable(false);
+        add(priceField);
+        priceField.setVisible(false);
 
         JLabel availabilityLabel = new JLabel("Availability:");
         availabilityLabel.setBounds(40, 320, 150, 30);
@@ -71,9 +77,11 @@ public class Make_Reservation extends JFrame {
         availabilityLabel.setVisible(false);
 
         JTextField availabilityBox = new JTextField();
-        availabilityBox.setBounds(200, 320, 180, 30);
+        availabilityBox.setBounds(200, 320, 350, 30);
         availabilityBox.setFont(new Font("Arial", Font.PLAIN, 16));
         availabilityBox.setEditable(false);
+        add(availabilityBox);
+        availabilityBox.setVisible(false);
 
         JLabel checkInLabel = new JLabel("Check-In Date (yyyy/mm/dd):");
         checkInLabel.setBounds(40, 375, 270, 30);
@@ -155,17 +163,149 @@ public class Make_Reservation extends JFrame {
         add(payBtn);
         payBtn.setVisible(false);
         payBtn.addActionListener(new ActionListener() {
+
             @Override
+
             public void actionPerformed(ActionEvent e) {
-                String totalText = totalPriceField.getText();
-                if (totalText.isEmpty() || totalText.equals("Invalid Dates")) {
-                    JOptionPane.showMessageDialog(Make_Reservation.this,"Please select valid dates first.");
+
+                String roomNumber =
+                        roomNumberField.getText().trim();
+
+                if (roomNumber.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "Please enter a room number first."
+                    );
+
                     return;
                 }
-                double totalPrice = Double.parseDouble(totalText);
+
+
+                // Check the actual room status from room.txt
+                String roomStatus = getRoomAvailability(roomNumber);
+
+
+                if (roomStatus.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "Room not found!"
+                    );
+
+                    return;
+                }
+
+
+                // Maintenance rooms cannot be booked
+                if (roomStatus.equalsIgnoreCase("Maintenance")) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "This room is under maintenance.\n" +
+                            "You cannot reserve this room.",
+                            "Room Unavailable",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+                    return;
+                }
+
+
+                // Occupied rooms cannot be booked
+                if (roomStatus.equalsIgnoreCase("Occupied")) {
+
+                    String availableDate =
+                            getAvailableDate(roomNumber);
+
+                    if (!availableDate.isEmpty()) {
+
+                        JOptionPane.showMessageDialog(
+                                Make_Reservation.this,
+                                "This room is currently occupied.\n" +
+                                "Available on: " + availableDate,
+                                "Room Unavailable",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+
+                    } else {
+
+                        JOptionPane.showMessageDialog(
+                                Make_Reservation.this,
+                                "This room is currently occupied.",
+                                "Room Unavailable",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+
+                    }
+
+                    return;
+                }
+
+
+                // Room must be Available
+                if (!roomStatus.equalsIgnoreCase("Available")) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "This room is not available for booking.",
+                            "Room Unavailable",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+                    return;
+                }
+
+
+                // Check total price
+                String totalText =
+                        totalPriceField.getText();
+
+
+                if (totalText.isEmpty() ||
+                        totalText.equals("Invalid Dates")) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "Please select valid dates first."
+                    );
+
+                    return;
+                }
+
+
+                double totalPrice =
+                        Double.parseDouble(totalText);
+
+
+                String checkInDate =
+                        checkInYearCombo.getSelectedItem()
+                        + "-"
+                        + checkInMonthCombo.getSelectedItem()
+                        + "-"
+                        + checkInDayCombo.getSelectedItem();
+
+
+                String checkOutDate =
+                        checkOutYearCombo.getSelectedItem()
+                        + "-"
+                        + checkOutMonthCombo.getSelectedItem()
+                        + "-"
+                        + checkOutDayCombo.getSelectedItem();
+
+
                 setVisible(false);
-                new Payment(totalPrice);
+
+
+                new Payment(
+                        totalPrice,
+                        roomNumber,
+                        checkInDate,
+                        checkOutDate
+                );
+
             }
+
         });
 
         ActionListener dateUpdater = new ActionListener() {
@@ -245,25 +385,142 @@ public class Make_Reservation extends JFrame {
         enterBtn.setBackground(Color.BLACK);
         add(enterBtn);
         enterBtn.addActionListener(new ActionListener() {
+
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
+
+                String roomNumber =
+                        roomNumberField.getText().trim();
+
+
+                if (roomNumber.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "Please enter a room number."
+                    );
+
+                    return;
+
+                }
+
+
+                // Load room information
+                boolean found =
+                        loadRoom(
+                                roomNumber,
+                                categoryBox,
+                                bedBox,
+                                priceField,
+                                availabilityBox
+                        );
+
+
+                // Room does not exist
+                if (!found) {
+
+                    JOptionPane.showMessageDialog(
+                            Make_Reservation.this,
+                            "Room " + roomNumber + " not found!",
+                            "Room Not Found",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+
+
+                    categoryLabel.setVisible(false);
+
+                    bedLabel.setVisible(false);
+
+                    priceLabel.setVisible(false);
+
+                    availabilityLabel.setVisible(false);
+
+                    categoryBox.setVisible(false);
+
+                    bedBox.setVisible(false);
+
+                    priceField.setVisible(false);
+
+                    availabilityBox.setVisible(false);
+
+
+                    // Show date fields
+                    checkInLabel.setVisible(false);
+
+                    checkInYearCombo.setVisible(false);
+
+                    checkInMonthCombo.setVisible(false);
+
+                    checkInDayCombo.setVisible(false);
+
+
+                    checkOutLabel.setVisible(false);
+
+                    checkOutYearCombo.setVisible(false);
+
+                    checkOutMonthCombo.setVisible(false);
+
+                    checkOutDayCombo.setVisible(false);
+
+
+                    totalPrice.setVisible(false);
+
+                    totalPriceField.setVisible(false);
+
+                    payBtn.setVisible(false);
+
+
+                    return;
+
+                }
+
+
+                // Show room information
                 categoryLabel.setVisible(true);
+
                 bedLabel.setVisible(true);
+
                 priceLabel.setVisible(true);
+
                 availabilityLabel.setVisible(true);
+
+                categoryBox.setVisible(true);
+
+                bedBox.setVisible(true);
+
+                priceField.setVisible(true);
+
+                availabilityBox.setVisible(true);
+
+
+                // Show date fields
                 checkInLabel.setVisible(true);
+
                 checkInYearCombo.setVisible(true);
+
                 checkInMonthCombo.setVisible(true);
+
                 checkInDayCombo.setVisible(true);
+
+
                 checkOutLabel.setVisible(true);
+
                 checkOutYearCombo.setVisible(true);
+
                 checkOutMonthCombo.setVisible(true);
+
                 checkOutDayCombo.setVisible(true);
+
+
                 totalPrice.setVisible(true);
+
                 totalPriceField.setVisible(true);
+
                 payBtn.setVisible(true);
-                loadRoom(roomNumberField.getText().trim(), categoryBox,bedBox,priceField,availabilityBox);
+
             }
+
         });
 
         getContentPane().setBackground(Color.BLACK);
@@ -275,43 +532,146 @@ public class Make_Reservation extends JFrame {
         setVisible(true);
     }
 
-    public void loadRoom(String selectedRoomNumber, JTextField categoryBox, JTextField bedBox, JTextField priceField, JTextField availabilityBox){
-        try{
+    public boolean loadRoom(
+        String selectedRoomNumber,
+        JTextField categoryBox,
+        JTextField bedBox,
+        JTextField priceField,
+        JTextField availabilityBox) {
 
-            BufferedReader br = new BufferedReader(new FileReader("room.txt"));
+        boolean found = false;
+
+        try {
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("room.txt")
+                    );
 
             String line;
-            while((line = br.readLine())!=null){
-                if(line.trim().isEmpty()){
+
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
                     continue;
                 }
-                String[] data = line.split("\\|");
-                if(data.length>=5){
-                    String roomNumber = data[0];
-                    String category = data[1];
-                    String bedType = data[2];
-                    String price = data[3];
-                    String availability = data[4];
-                    if(roomNumber.equals(selectedRoomNumber)){
+
+
+                String[] data =
+                        line.split("\\|");
+
+
+                if (data.length >= 5) {
+
+                    String roomNumber =
+                            data[0].trim();
+
+                    String category =
+                            data[1].trim();
+
+                    String bedType =
+                            data[2].trim();
+
+                    String price =
+                            data[3].trim();
+
+                    String availability =
+                            data[4].trim();
+
+
+                    if (roomNumber.equalsIgnoreCase(
+                            selectedRoomNumber)) {
+
+                        found = true;
+
+
                         categoryBox.setText(category);
+
                         bedBox.setText(bedType);
+
                         priceField.setText(price);
-                        availabilityBox.setText(availability);
-                        add(categoryBox);
-                        add(bedBox);
-                        add(priceField);
-                        add(availabilityBox);
+
+
+                        // Show actual availability
+                        if (availability.equalsIgnoreCase(
+                                "Occupied")) {
+
+                            String availableDate =
+                                    getAvailableDate(roomNumber);
+
+
+                            if (!availableDate.isEmpty()) {
+
+                                availabilityBox.setText(
+                                        "Occupied - Available on: "
+                                        + availableDate
+                                );
+
+                            } else {
+
+                                availabilityBox.setText(
+                                        "Occupied"
+                                );
+
+                            }
+
+                        } else if (
+                                availability.equalsIgnoreCase(
+                                        "Maintenance")) {
+
+                            availabilityBox.setText(
+                                    "Maintenance"
+                            );
+
+                        } else if (
+                                availability.equalsIgnoreCase(
+                                        "Available")) {
+
+                            availabilityBox.setText(
+                                    "Available"
+                            );
+
+                        } else {
+
+                            availabilityBox.setText(
+                                    availability
+                            );
+
+                        }
+
+
+                        break;
+
                     }
+
                 }
+
             }
+
 
             br.close();
 
-        } catch(FileNotFoundException e){
-            JOptionPane.showMessageDialog(this,"room.txt not found!","Error",JOptionPane.ERROR_MESSAGE);
-        } catch(IOException e){
+
+        } catch (FileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "room.txt not found!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+
+        } catch (IOException e) {
+
             e.printStackTrace();
+
         }
+
+
+        return found;
+
     }
 
     private void calculateTotalPrice(JComboBox<String> inYear, JComboBox<String> inMonth, JComboBox<String> inDay, JComboBox<String> outYear, JComboBox<String> outMonth, JComboBox<String> outDay, JTextField priceField, JTextField totalPriceField) {
@@ -353,6 +713,111 @@ public class Make_Reservation extends JFrame {
         } catch (Exception ex) {
             totalPriceField.setText("");
         }
+    }
+
+    public String getAvailableDate(String roomNumber) {
+
+        try {
+            BufferedReader br =
+                    new BufferedReader(new FileReader("reservation.txt"));
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] data = line.split("\\|");
+
+                // username | roomNumber | checkIn | checkOut
+                if (data.length >= 4 &&
+                        data[1].equals(roomNumber)) {
+
+                    br.close();
+
+                    return data[3];
+                }
+            }
+
+            br.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public String getRoomAvailability(String roomNumber) {
+
+        try {
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("room.txt")
+                    );
+
+            String line;
+
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+
+                String[] data =
+                        line.split("\\|");
+
+
+                if (data.length >= 5) {
+
+                    String savedRoomNumber =
+                            data[0].trim();
+
+                    String availability =
+                            data[4].trim();
+
+
+                    if (savedRoomNumber.equalsIgnoreCase(
+                            roomNumber)) {
+
+                        br.close();
+
+                        return availability;
+
+                    }
+
+                }
+
+            }
+
+
+            br.close();
+
+
+        } catch (FileNotFoundException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "room.txt not found!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
+
+        return "";
+
     }
     public static void main(String[] args){
         new Make_Reservation();

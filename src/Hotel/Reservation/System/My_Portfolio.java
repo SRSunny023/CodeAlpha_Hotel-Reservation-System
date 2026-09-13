@@ -181,12 +181,11 @@ public class My_Portfolio extends JFrame {
                     continue;
                 }
                 String[] parts = line.split("\\|");
-                if(parts.length>=5){
+                if(parts.length>=4){
                     String userName = parts[0];
                     String fullName = parts[1];
                     String phoneNumber = parts[2];
                     String nidNumber = parts[3];
-                    String paymentCard = parts[4];
 
                     if(userName.equals(currentUserName)){
                         if(fullName==""){
@@ -197,7 +196,6 @@ public class My_Portfolio extends JFrame {
                             profile[1] = fullName;
                             profile[2] = phoneNumber;
                             profile[3] = nidNumber;
-                            profile[4] = paymentCard;
                             return true;
                         }
                     }

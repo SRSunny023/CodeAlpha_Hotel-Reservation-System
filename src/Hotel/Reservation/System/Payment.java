@@ -9,9 +9,13 @@ public class Payment extends JFrame {
     JComboBox<String> paymentMethodField;
     JButton addPaymentBtn, deleteCardBtn,depositBtn;
     double reservationAmount;
-    Payment(double amount){
+    String reservationRoomNumber, reservationCheckIn, reservationCheckOut;
+    Payment(double amount, String roomNumber, String checkInDate, String checkOutDate){
 
         reservationAmount = amount;
+        reservationRoomNumber = roomNumber;
+        reservationCheckIn = checkInDate;
+        reservationCheckOut = checkOutDate;
 
         JLabel title = new JLabel("Payment");
         title.setBounds(280, 20, 250, 40);
@@ -98,6 +102,7 @@ public class Payment extends JFrame {
         payBtn.setForeground(Color.WHITE);
         payBtn.setBackground(Color.BLACK);
         add(payBtn);
+        if(reservationAmount==-1) payBtn.setVisible(false);
         payBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -177,7 +182,6 @@ public class Payment extends JFrame {
                     paymentMethodField.setVisible(false);
                     paymentPin.setVisible(false);
                     paymentPinField.setVisible(false);
-                    payBtn.setVisible(false);
                     addPaymentSubmitBtn.setVisible(true);
                     addPaymentBtn.setVisible(false);
                     deleteCardBtn.setVisible(false);
@@ -545,7 +549,19 @@ public class Payment extends JFrame {
             fw.write(content.toString());
             fw.close();
 
-            JOptionPane.showMessageDialog(Payment.this,"Payment successful!\n" +"Amount: " + amount);
+            saveReservation(userName,reservationRoomNumber,reservationCheckIn,reservationCheckOut);
+
+            savePaymentRecord(
+                userName,
+                reservationRoomNumber,
+                amount,
+                selectedCard
+            );
+
+            updateRoomAvailability(reservationRoomNumber);
+
+            JOptionPane.showMessageDialog(Payment.this,"Payment successful!\n" +"Amount: " + amount +"\nRoom " + reservationRoomNumber + " is now occupied.");
+
             setVisible(false);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -553,8 +569,107 @@ public class Payment extends JFrame {
         }
     }
 
+    public void updateRoomAvailability(String roomNumber) {
+
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader("room.txt"));
+            StringBuilder content = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+                String[] data = line.split("\\|");
+                if (data.length >= 5 && data[0].equals(roomNumber)) {
+                    data[4] = "Occupied";
+                    line = data[0] + "|" + data[1] + "|" + data[2] + "|" + data[3] + "|" + data[4];
+                }
+                content.append(line);
+                content.append(System.lineSeparator());
+            }
+            br.close();
+            FileWriter fw = new FileWriter("room.txt");
+            fw.write(content.toString());
+            fw.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(Payment.this, "Error updating room availability.");
+        }
+    }
+
+    public void saveReservation(String userName, String roomNumber, String checkInDate, String checkOutDate) {
+
+        try {
+
+            FileWriter fw = new FileWriter("reservation.txt", true);
+
+            fw.write(
+                userName + "|" +
+                roomNumber + "|" +
+                checkInDate + "|" +
+                checkOutDate
+            );
+
+            fw.write(System.lineSeparator());
+
+            fw.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(
+                Payment.this,
+                "Error saving reservation."
+            );
+        }
+    }
+
+    public void savePaymentRecord(
+        String userName,
+        String roomNumber,
+        double amount,
+        String paymentMethod) {
+
+        try {
+
+            FileWriter fw =
+                    new FileWriter("payment.txt", true);
+
+            String date =
+                    java.time.LocalDate.now().format(
+                            java.time.format.DateTimeFormatter.ofPattern(
+                                    "dd/MM/yy"
+                            )
+                    );
+
+            fw.write(
+                    userName + "|" +
+                    roomNumber + "|" +
+                    amount + "|" +
+                    paymentMethod + "|" +
+                    date
+            );
+
+            fw.write(System.lineSeparator());
+
+            fw.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(
+                    Payment.this,
+                    "Error saving payment record."
+            );
+        }
+    }
+
     public static void main(String[] args){
-        new Payment(-1);
+        new Payment(-1,"-1","-1","-1");
     }
 
 }

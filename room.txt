@@ -1,2 +1,2 @@
-101|Suite|Double Bed|250|Available
-102|Deluxe|Single Bed|390|Available
+101|Suite|Double Bed|250|Occupied
+102|Deluxe|Single Bed|390|Maintenance

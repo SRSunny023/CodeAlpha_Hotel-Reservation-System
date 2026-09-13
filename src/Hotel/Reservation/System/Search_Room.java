@@ -67,6 +67,11 @@ public class Search_Room extends JFrame {
         JTable table = new JTable(model);
         table.setFont(new Font("Arial", Font.PLAIN, 18));
         table.setRowHeight(30);
+        table.getColumnModel().getColumn(0).setPreferredWidth(80);   // Room Number
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);  // Category
+        table.getColumnModel().getColumn(2).setPreferredWidth(110);  // Bed Type
+        table.getColumnModel().getColumn(3).setPreferredWidth(70);   // Price
+        table.getColumnModel().getColumn(4).setPreferredWidth(250);  // Availability
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -141,9 +146,80 @@ public class Search_Room extends JFrame {
                     String bedType = data[2];
                     String price = data[3];
                     String availability = data[4];
+                    if (availability.equalsIgnoreCase("Occupied")) {
+
+                        String availableDate =
+                                getAvailableDate(roomNumber);
+
+                        if (!availableDate.isEmpty()) {
+
+                            try {
+
+                                /*
+                                * Your reservation date format is:
+                                * 2026-August-15
+                                */
+                                java.time.format.DateTimeFormatter formatter =
+                                        java.time.format.DateTimeFormatter.ofPattern(
+                                                "yyyy-MMMM-d",
+                                                java.util.Locale.ENGLISH
+                                        );
+
+                                java.time.LocalDate checkoutDate =
+                                        java.time.LocalDate.parse(
+                                                availableDate,
+                                                formatter
+                                        );
+
+                                java.time.LocalDate today =
+                                        java.time.LocalDate.now();
+
+                                /*
+                                * If checkout date has arrived,
+                                * make room available again.
+                                */
+                                if (!today.isBefore(checkoutDate)) {
+
+                                    availability = "Available";
+
+                                    updateRoomStatus(
+                                            roomNumber,
+                                            "Available"
+                                    );
+
+                                } else {
+
+                                    availability =
+                                            "Occupied|Available: "
+                                            + formatAvailableDate(availableDate);
+                                }
+
+                            } catch (Exception ex) {
+
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
                     boolean categoryMatch = selectedCategory.equals("All") || category.equals(selectedCategory);
                     boolean bedMatch = selectedBedType.equals("All")|| bedType.equals(selectedBedType);
-                    boolean availabilityMatch = selectedAvailability.equals("All")|| availability.equals(selectedAvailability);
+                    boolean availabilityMatch;
+
+                    if (selectedAvailability.equals("All")) {
+
+                        availabilityMatch = true;
+
+                    } else if (selectedAvailability.equals("Available")) {
+
+                        availabilityMatch =
+                                availability.equalsIgnoreCase("Available");
+
+                    } else {
+
+                        availabilityMatch =
+                                availability.equalsIgnoreCase(
+                                        selectedAvailability
+                                );
+                    }
 
                     if(categoryMatch && bedMatch && availabilityMatch){
                         model.addRow(new Object[]{roomNumber,category,bedType,price,availability});
@@ -159,6 +235,138 @@ public class Search_Room extends JFrame {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public String getAvailableDate(String roomNumber) {
+
+        try {
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("reservation.txt")
+                    );
+
+            String line;
+
+            String latestCheckOut = "";
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                // username | roomNumber | checkIn | checkOut
+                String[] data = line.split("\\|");
+
+                if (data.length >= 4 &&
+                        data[1].equals(roomNumber)) {
+
+                    latestCheckOut = data[3];
+                }
+            }
+
+            br.close();
+
+            return latestCheckOut;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public void updateRoomStatus(
+        String roomNumber,
+        String newStatus) {
+
+        try {
+
+            File inputFile = new File("room.txt");
+            File tempFile = new File("room_temp.txt");
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader(inputFile)
+                    );
+
+            BufferedWriter bw =
+                    new BufferedWriter(
+                            new FileWriter(tempFile)
+                    );
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] data = line.split("\\|");
+
+                if (data.length >= 5 &&
+                        data[0].equals(roomNumber)) {
+
+                    data[4] = newStatus;
+
+                    line = String.join("|", data);
+                }
+
+                bw.write(line);
+                bw.newLine();
+            }
+
+            br.close();
+            bw.close();
+
+            if (inputFile.delete()) {
+
+                tempFile.renameTo(inputFile);
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not update room status."
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public String formatAvailableDate(String date) {
+
+        try {
+
+            java.time.format.DateTimeFormatter inputFormatter =
+                    java.time.format.DateTimeFormatter.ofPattern(
+                            "yyyy-MMMM-d",
+                            java.util.Locale.ENGLISH
+                    );
+
+            java.time.format.DateTimeFormatter outputFormatter =
+                    java.time.format.DateTimeFormatter.ofPattern(
+                            "dd/MM/yy"
+                    );
+
+            java.time.LocalDate localDate =
+                    java.time.LocalDate.parse(
+                            date,
+                            inputFormatter
+                    );
+
+            return localDate.format(outputFormatter);
+
+        } catch (Exception e) {
+
+            return date;
         }
     }
 

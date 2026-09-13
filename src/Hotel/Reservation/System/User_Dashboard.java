@@ -74,7 +74,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new My_Reservation();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -91,7 +91,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-
+                    new Cancel_Reservation();
                 } catch(Exception e){
                     e.printStackTrace();
                 }
@@ -108,7 +108,7 @@ public class User_Dashboard extends JFrame {
             @Override
             public void actionPerformed(ActionEvent aE){
                 try{
-                    new Payment(-1);
+                    new Payment(-1,"-1","-1","-1");
                 } catch(Exception e){
                     e.printStackTrace();
                 }
