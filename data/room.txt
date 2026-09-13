@@ -1,0 +1,8 @@
+101|Suite|Double Bed|250|Occupied
+102|Deluxe|Single Bed|100|Available
+103|Standard|Single Bed|100|Available
+104|Standard|Double Bed|200|Available
+105|Standard|King|300|Available
+106|Standard|Twin|400|Available
+107|Deluxe|King|600|Occupied
+108|Suite|Twin|600|Maintenance

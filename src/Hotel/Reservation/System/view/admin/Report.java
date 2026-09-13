@@ -1,9 +1,11 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.admin;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+
+import Hotel.Reservation.System.view.Welcome;
 
 public class Report extends JFrame {
 
@@ -21,15 +23,13 @@ public class Report extends JFrame {
 
         add(title);
 
-
         // Report area
         reportArea = new JTextArea();
 
         reportArea.setBounds(40, 90, 665, 450);
 
         reportArea.setFont(
-                new Font("Monospaced", Font.PLAIN, 18)
-        );
+                new Font("Monospaced", Font.PLAIN, 18));
 
         reportArea.setEditable(false);
 
@@ -41,10 +41,8 @@ public class Report extends JFrame {
 
         add(reportArea);
 
-
         // Load report
         loadReport();
-
 
         // Refresh button
         JButton refresh = new JButton("Refresh");
@@ -52,8 +50,7 @@ public class Report extends JFrame {
         refresh.setBounds(200, 570, 150, 35);
 
         refresh.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
 
         refresh.setForeground(Color.WHITE);
 
@@ -62,7 +59,6 @@ public class Report extends JFrame {
         refresh.setFocusPainted(false);
 
         add(refresh);
-
 
         refresh.addActionListener(
                 new ActionListener() {
@@ -75,9 +71,7 @@ public class Report extends JFrame {
 
                     }
 
-                }
-        );
-
+                });
 
         // Back button
         JButton back = new JButton("Back");
@@ -85,8 +79,7 @@ public class Report extends JFrame {
         back.setBounds(390, 570, 150, 35);
 
         back.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
 
         back.setForeground(Color.WHITE);
 
@@ -95,7 +88,6 @@ public class Report extends JFrame {
         back.setFocusPainted(false);
 
         add(back);
-
 
         back.addActionListener(
                 new ActionListener() {
@@ -108,9 +100,7 @@ public class Report extends JFrame {
 
                     }
 
-                }
-        );
-
+                });
 
         // Frame settings
         getContentPane().setBackground(Color.BLACK);
@@ -121,15 +111,13 @@ public class Report extends JFrame {
 
         setLocation(
                 Welcome.X_POSITION + 280,
-                Welcome.Y_POSITION + 2
-        );
+                Welcome.Y_POSITION + 2);
 
         setSize(745, 650);
 
         setVisible(true);
 
     }
-
 
     public void loadReport() {
 
@@ -143,17 +131,13 @@ public class Report extends JFrame {
 
         int totalReservations = 0;
 
-
         // Read room information
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("room.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.ROOM_FILE));
 
             String line;
-
 
             while ((line = br.readLine()) != null) {
 
@@ -161,33 +145,26 @@ public class Report extends JFrame {
                     continue;
                 }
 
-
-                String[] data =
-                        line.split("\\|");
-
+                String[] data = line.split("\\|");
 
                 if (data.length >= 5) {
 
                     totalRooms++;
 
-                    String availability =
-                            data[4].trim();
-
+                    String availability = data[4].trim();
 
                     if (availability.equalsIgnoreCase(
                             "Available")) {
 
                         availableRooms++;
 
-                    } else if (
-                            availability.equalsIgnoreCase(
-                                    "Occupied")) {
+                    } else if (availability.equalsIgnoreCase(
+                            "Occupied")) {
 
                         occupiedRooms++;
 
-                    } else if (
-                            availability.equalsIgnoreCase(
-                                    "Maintenance")) {
+                    } else if (availability.equalsIgnoreCase(
+                            "Maintenance")) {
 
                         maintenanceRooms++;
 
@@ -199,18 +176,15 @@ public class Report extends JFrame {
 
             br.close();
 
-
         } catch (FileNotFoundException e) {
 
             JOptionPane.showMessageDialog(
                     this,
                     "room.txt not found!",
                     "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+                    JOptionPane.ERROR_MESSAGE);
 
             return;
-
 
         } catch (IOException e) {
 
@@ -218,17 +192,13 @@ public class Report extends JFrame {
 
         }
 
-
         // Read reservation information
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("reservation.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.RESERVATION_FILE));
 
             String line;
-
 
             while ((line = br.readLine()) != null) {
 
@@ -236,10 +206,7 @@ public class Report extends JFrame {
                     continue;
                 }
 
-
-                String[] data =
-                        line.split("\\|");
-
+                String[] data = line.split("\\|");
 
                 if (data.length >= 4) {
 
@@ -251,11 +218,9 @@ public class Report extends JFrame {
 
             br.close();
 
-
         } catch (FileNotFoundException e) {
 
             totalReservations = 0;
-
 
         } catch (IOException e) {
 
@@ -263,86 +228,63 @@ public class Report extends JFrame {
 
         }
 
-
         // Display report
-        StringBuilder report =
-                new StringBuilder();
-
+        StringBuilder report = new StringBuilder();
 
         report.append(
-                "========================================\n"
-        );
+                "========================================\n");
 
         report.append(
-                "              HOTEL REPORT\n"
-        );
+                "              HOTEL REPORT\n");
 
         report.append(
-                "========================================\n\n"
-        );
-
+                "========================================\n\n");
 
         report.append(
-                "Total Rooms          : "
-        );
+                "Total Rooms          : ");
 
         report.append(totalRooms);
 
         report.append("\n\n");
 
-
         report.append(
-                "Available Rooms      : "
-        );
+                "Available Rooms      : ");
 
         report.append(availableRooms);
 
         report.append("\n");
 
-
         report.append(
-                "Occupied Rooms       : "
-        );
+                "Occupied Rooms       : ");
 
         report.append(occupiedRooms);
 
         report.append("\n");
 
-
         report.append(
-                "Maintenance Rooms    : "
-        );
+                "Maintenance Rooms    : ");
 
         report.append(maintenanceRooms);
 
         report.append("\n\n");
 
+        report.append(
+                "----------------------------------------\n");
 
         report.append(
-                "----------------------------------------\n"
-        );
-
-
-        report.append(
-                "Total Reservations   : "
-        );
+                "Total Reservations   : ");
 
         report.append(totalReservations);
 
         report.append("\n\n");
 
-
         report.append(
-                "========================================\n"
-        );
-
+                "========================================\n");
 
         reportArea.setText(
-                report.toString()
-        );
+                report.toString());
 
     }
-
 
     public static void main(String[] args) {
 

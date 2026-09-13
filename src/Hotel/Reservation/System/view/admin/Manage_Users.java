@@ -1,4 +1,4 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.admin;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,19 +6,20 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Hotel.Reservation.System.view.Welcome;
+
 public class Manage_Users extends JFrame {
 
     public static final int LABEL_WIDTH = 200;
     public static final int LABEL_HEIGHT = 30;
 
-    Manage_Users(){
+    Manage_Users() {
 
         JLabel title = new JLabel("Manage Users");
         title.setBounds(280, 20, 250, 40);
         title.setFont(new Font("Arial", Font.BOLD, 32));
         title.setForeground(Color.WHITE);
         add(title);
-
 
         String[] columns = { "Username", "Email", "Role" };
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
@@ -31,12 +32,11 @@ public class Manage_Users extends JFrame {
         JTable userTable = new JTable(model);
         userTable.setFont(new Font("Arial", Font.PLAIN, 18));
         userTable.setRowHeight(30);
-        userTable.getTableHeader().setFont( new Font("Arial", Font.BOLD, 18));
+        userTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 18));
 
         JScrollPane scrollPane = new JScrollPane(userTable);
         scrollPane.setBounds(40, 90, 665, 400);
         add(scrollPane);
-
 
         loadUsers(model);
 
@@ -51,22 +51,22 @@ public class Manage_Users extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 int selectedRow = userTable.getSelectedRow();
-                if(selectedRow == -1){
-                    JOptionPane.showMessageDialog(null,"Please select a user!","Error",JOptionPane.ERROR_MESSAGE);
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(null, "Please select a user!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 String username = model.getValueAt(selectedRow, 0).toString();
                 String currentRole = model.getValueAt(selectedRow, 2).toString();
 
-                JComboBox<String> roleCombo = new JComboBox<>(new String[]{"User", "Admin"});
+                JComboBox<String> roleCombo = new JComboBox<>(new String[] { "User", "Admin" });
                 roleCombo.setSelectedItem(currentRole);
                 roleCombo.setFont(new Font("Arial", Font.PLAIN, 18));
 
-                int result = JOptionPane.showConfirmDialog(null,roleCombo,"Change Role for " + username,JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);
+                int result = JOptionPane.showConfirmDialog(null, roleCombo, "Change Role for " + username,
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-
-                if(result == JOptionPane.OK_OPTION){
+                if (result == JOptionPane.OK_OPTION) {
 
                     String newRole = (String) roleCombo.getSelectedItem();
 
@@ -76,12 +76,14 @@ public class Manage_Users extends JFrame {
 
                     if (updateUserRole(username, newRole)) {
 
-                        model.setValueAt(newRole,selectedRow,2);
-                        JOptionPane.showMessageDialog(null,"User role updated successfully!","Success",JOptionPane.INFORMATION_MESSAGE);
+                        model.setValueAt(newRole, selectedRow, 2);
+                        JOptionPane.showMessageDialog(null, "User role updated successfully!", "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
 
                     } else {
 
-                        JOptionPane.showMessageDialog(null,"Could not update user role!","Error",JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Could not update user role!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -100,11 +102,10 @@ public class Manage_Users extends JFrame {
             }
         });
 
-
         getContentPane().setBackground(Color.BLACK);
         setUndecorated(true);
         setLayout(null);
-        setLocation(Welcome.X_POSITION + 280,Welcome.Y_POSITION + 38);
+        setLocation(Welcome.X_POSITION + 280, Welcome.Y_POSITION + 38);
         setSize(745, 731);
         setVisible(true);
     }
@@ -113,7 +114,7 @@ public class Manage_Users extends JFrame {
 
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.USERS_FILE));
             String line;
             while ((line = br.readLine()) != null) {
 
@@ -133,7 +134,7 @@ public class Manage_Users extends JFrame {
                         continue;
                     }
 
-                    model.addRow(new Object[]{username,email,role});
+                    model.addRow(new Object[] { username, email, role });
                 }
             }
 
@@ -141,7 +142,7 @@ public class Manage_Users extends JFrame {
 
         } catch (FileNotFoundException e) {
 
-            JOptionPane.showMessageDialog(null,"users.txt not found!","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "users.txt not found!", "Error", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException e) {
 
@@ -149,12 +150,12 @@ public class Manage_Users extends JFrame {
         }
     }
 
-    private boolean updateUserRole(String username,String newRole) {
+    private boolean updateUserRole(String username, String newRole) {
 
         boolean updated = false;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("users.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.USERS_FILE));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
@@ -172,8 +173,8 @@ public class Manage_Users extends JFrame {
 
             br.close();
 
-            if(updated){
-                FileWriter fw = new FileWriter("users.txt");
+            if (updated) {
+                FileWriter fw = new FileWriter(Welcome.USERS_FILE);
                 fw.write(content.toString());
                 fw.close();
                 return true;
@@ -186,7 +187,6 @@ public class Manage_Users extends JFrame {
 
         return false;
     }
-
 
     public static void main(String[] args) {
 

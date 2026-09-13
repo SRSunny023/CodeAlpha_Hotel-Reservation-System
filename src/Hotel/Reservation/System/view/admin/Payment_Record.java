@@ -1,10 +1,12 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.admin;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import Hotel.Reservation.System.view.Welcome;
 
 public class Payment_Record extends JFrame {
 
@@ -20,7 +22,6 @@ public class Payment_Record extends JFrame {
 
         add(title);
 
-
         // Table columns
         String[] columns = {
                 "User Name",
@@ -30,29 +31,25 @@ public class Payment_Record extends JFrame {
                 "Date"
         };
 
-
         // Table model
-        DefaultTableModel model =
-                new DefaultTableModel(columns, 0) {
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
 
-                    @Override
-                    public boolean isCellEditable(
-                            int row,
-                            int column) {
+            @Override
+            public boolean isCellEditable(
+                    int row,
+                    int column) {
 
-                        return false;
+                return false;
 
-                    }
+            }
 
-                };
-
+        };
 
         // JTable
         JTable paymentTable = new JTable(model);
 
         paymentTable.setFont(
-                new Font("Arial", Font.PLAIN, 16)
-        );
+                new Font("Arial", Font.PLAIN, 16));
 
         paymentTable.setRowHeight(30);
 
@@ -60,38 +57,29 @@ public class Payment_Record extends JFrame {
 
         paymentTable.setForeground(Color.BLACK);
 
-
         // Table header
         paymentTable.getTableHeader().setFont(
-                new Font("Arial", Font.BOLD, 15)
-        );
+                new Font("Arial", Font.BOLD, 15));
 
         paymentTable.getTableHeader().setBackground(
-                Color.BLACK
-        );
+                Color.BLACK);
 
         paymentTable.getTableHeader().setForeground(
-                Color.WHITE
-        );
-
+                Color.WHITE);
 
         // Scroll pane
-        JScrollPane scrollPane =
-                new JScrollPane(paymentTable);
+        JScrollPane scrollPane = new JScrollPane(paymentTable);
 
         scrollPane.setBounds(
                 30,
                 90,
                 685,
-                450
-        );
+                450);
 
         add(scrollPane);
 
-
         // Load payment records
         loadPaymentRecords(model);
-
 
         // Back button
         JButton backBtn = new JButton("Back");
@@ -100,19 +88,16 @@ public class Payment_Record extends JFrame {
                 280,
                 570,
                 150,
-                35
-        );
+                35);
 
         backBtn.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
 
         backBtn.setForeground(Color.WHITE);
 
         backBtn.setBackground(Color.BLACK);
 
         add(backBtn);
-
 
         backBtn.addActionListener(
                 new ActionListener() {
@@ -125,9 +110,7 @@ public class Payment_Record extends JFrame {
 
                     }
 
-                }
-        );
-
+                });
 
         // Frame settings
         getContentPane().setBackground(Color.BLACK);
@@ -138,8 +121,7 @@ public class Payment_Record extends JFrame {
 
         setLocation(
                 Welcome.X_POSITION + 280,
-                Welcome.Y_POSITION + 2
-        );
+                Welcome.Y_POSITION + 2);
 
         setSize(745, 650);
 
@@ -147,16 +129,13 @@ public class Payment_Record extends JFrame {
 
     }
 
-
     public void loadPaymentRecords(
             DefaultTableModel model) {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("payment.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.PAYMENT_FILE));
 
             String line;
 
@@ -166,10 +145,7 @@ public class Payment_Record extends JFrame {
                     continue;
                 }
 
-
-                String[] data =
-                        line.split("\\|");
-
+                String[] data = line.split("\\|");
 
                 if (data.length >= 5) {
 
@@ -180,8 +156,7 @@ public class Payment_Record extends JFrame {
                                     data[2],
                                     data[3],
                                     data[4]
-                            }
-                    );
+                            });
 
                 }
 
@@ -189,24 +164,19 @@ public class Payment_Record extends JFrame {
 
             br.close();
 
-
             if (model.getRowCount() == 0) {
 
                 JOptionPane.showMessageDialog(
                         Payment_Record.this,
-                        "No payment records found."
-                );
+                        "No payment records found.");
 
             }
-
 
         } catch (FileNotFoundException e) {
 
             JOptionPane.showMessageDialog(
                     Payment_Record.this,
-                    "No payment records found."
-            );
-
+                    "No payment records found.");
 
         } catch (IOException e) {
 
@@ -214,13 +184,11 @@ public class Payment_Record extends JFrame {
 
             JOptionPane.showMessageDialog(
                     Payment_Record.this,
-                    "Error reading payment records."
-            );
+                    "Error reading payment records.");
 
         }
 
     }
-
 
     public static void main(String[] args) {
 

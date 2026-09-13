@@ -1,16 +1,18 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.user;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import Hotel.Reservation.System.view.Welcome;
 
 public class Payment extends JFrame {
     JComboBox<String> paymentMethodField;
-    JButton addPaymentBtn, deleteCardBtn,depositBtn;
+    JButton addPaymentBtn, deleteCardBtn, depositBtn;
     double reservationAmount;
     String reservationRoomNumber, reservationCheckIn, reservationCheckOut;
-    Payment(double amount, String roomNumber, String checkInDate, String checkOutDate){
+
+    Payment(double amount, String roomNumber, String checkInDate, String checkOutDate) {
 
         reservationAmount = amount;
         reservationRoomNumber = roomNumber;
@@ -31,7 +33,7 @@ public class Payment extends JFrame {
 
         String[] cards = new String[5];
         String userName = loadUserName();
-        loadCards(cards,userName);
+        loadCards(cards, userName);
 
         paymentMethodField = new JComboBox<>(cards);
         paymentMethodField.setBounds(300, 85, 250, 30);
@@ -102,21 +104,22 @@ public class Payment extends JFrame {
         payBtn.setForeground(Color.WHITE);
         payBtn.setBackground(Color.BLACK);
         add(payBtn);
-        if(reservationAmount==-1) payBtn.setVisible(false);
+        if (reservationAmount == -1)
+            payBtn.setVisible(false);
         payBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedCard = (String) paymentMethodField.getSelectedItem();
                 if (selectedCard == null || selectedCard.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please select a card first.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please select a card first.");
                     return;
                 }
                 String pin = new String(paymentPinField.getPassword());
                 if (pin.isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please enter your PIN.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please enter your PIN.");
                     return;
                 }
-                payForReservation(userName,selectedCard,pin,reservationAmount);
+                payForReservation(userName, selectedCard, pin, reservationAmount);
             }
         });
 
@@ -129,8 +132,8 @@ public class Payment extends JFrame {
         addPaymentSubmitBtn.setVisible(false);
         addPaymentSubmitBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
-                try{
+            public void actionPerformed(ActionEvent e) {
+                try {
 
                     String cardNames = cardNameField.getText();
                     String cardNumbers = cardNumberField.getText();
@@ -138,13 +141,13 @@ public class Payment extends JFrame {
 
                     String lines = userName + "|" + cardNames + "|" + cardNumbers + "|" + cardPins + "|" + "0";
 
-                    FileWriter fw = new FileWriter("cardInfo.txt",true);
+                    FileWriter fw = new FileWriter(Welcome.CARD_FILE, true);
                     fw.write(lines);
                     fw.write(System.lineSeparator());
                     fw.close();
                     setVisible(false);
 
-                } catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -158,17 +161,16 @@ public class Payment extends JFrame {
         add(addPaymentBtn);
         addPaymentBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
-                try{
+            public void actionPerformed(ActionEvent e) {
+                try {
 
                     int cardCount = countCards(userName);
 
                     if (cardCount >= 5) {
 
                         JOptionPane.showMessageDialog(
-                            Payment.this,
-                            "You cannot add more than 5 cards."
-                        );
+                                Payment.this,
+                                "You cannot add more than 5 cards.");
 
                         return;
                     }
@@ -187,7 +189,7 @@ public class Payment extends JFrame {
                     deleteCardBtn.setVisible(false);
                     depositBtn.setVisible(false);
 
-                } catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -218,10 +220,12 @@ public class Payment extends JFrame {
 
                 String selectedCard = (String) paymentMethodField.getSelectedItem();
                 if (selectedCard == null || selectedCard.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please select a card first.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please select a card first.");
                     return;
                 }
-                int confirm = JOptionPane.showConfirmDialog(Payment.this,"Are you sure you want to delete " + selectedCard + "?","Delete Card",JOptionPane.YES_NO_OPTION);
+                int confirm = JOptionPane.showConfirmDialog(Payment.this,
+                        "Are you sure you want to delete " + selectedCard + "?", "Delete Card",
+                        JOptionPane.YES_NO_OPTION);
                 if (confirm != JOptionPane.YES_OPTION) {
                     return;
                 }
@@ -242,17 +246,17 @@ public class Payment extends JFrame {
 
                 String selectedCard = (String) paymentMethodField.getSelectedItem();
                 if (selectedCard == null || selectedCard.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please select a card first.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please select a card first.");
                     return;
                 }
 
                 String pin = new String(paymentPinField.getPassword());
                 if (pin.isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please enter your PIN.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please enter your PIN.");
                     return;
                 }
 
-                String amountText = JOptionPane.showInputDialog(Payment.this,"Enter deposit amount:");
+                String amountText = JOptionPane.showInputDialog(Payment.this, "Enter deposit amount:");
                 if (amountText == null) {
                     return;
                 }
@@ -261,13 +265,13 @@ public class Payment extends JFrame {
 
                     double amount = Double.parseDouble(amountText);
                     if (amount <= 0) {
-                        JOptionPane.showMessageDialog(Payment.this,"Amount must be greater than 0.");
+                        JOptionPane.showMessageDialog(Payment.this, "Amount must be greater than 0.");
                         return;
                     }
                     depositMoney(userName, selectedCard, pin, amount);
 
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please enter a valid amount.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please enter a valid amount.");
                 }
             }
         });
@@ -283,12 +287,12 @@ public class Payment extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String selectedCard = (String) paymentMethodField.getSelectedItem();
                 if (selectedCard == null || selectedCard.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please select a card first.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please select a card first.");
                     return;
                 }
                 String pin = new String(paymentPinField.getPassword());
                 if (pin.isEmpty()) {
-                    JOptionPane.showMessageDialog(Payment.this,"Please enter your PIN.");
+                    JOptionPane.showMessageDialog(Payment.this, "Please enter your PIN.");
                     return;
                 }
                 showBalance(userName, selectedCard, pin);
@@ -299,45 +303,45 @@ public class Payment extends JFrame {
 
         setUndecorated(true);
         setLayout(null);
-        setLocation(Welcome.X_POSITION + 280,Welcome.Y_POSITION + 2);
+        setLocation(Welcome.X_POSITION + 280, Welcome.Y_POSITION + 2);
         setSize(745, 767);
         setVisible(true);
     }
 
-    public String loadUserName(){
-        try{
+    public String loadUserName() {
+        try {
 
-            BufferedReader br = new BufferedReader(new FileReader("currentSession.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CURRENT_SESSION_FILE));
             String line = br.readLine();
             String[] parts = line.split("\\|");
             br.close();
             return parts[0];
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    public void loadCards(String[] cards, String userName){
-        try{
+    public void loadCards(String[] cards, String userName) {
+        try {
 
-            BufferedReader br = new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
             String line;
-            int i=0;
-            while((line=br.readLine())!=null){
+            int i = 0;
+            while ((line = br.readLine()) != null) {
                 String[] data = line.split("\\|");
                 if (line.trim().isEmpty()) {
                     continue;
                 }
-                if(data.length>0 && data[0].equals(userName)){
+                if (data.length > 0 && data[0].equals(userName)) {
                     String cardName = data[1];
                     cards[i++] = cardName;
                 }
             }
             br.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -347,7 +351,7 @@ public class Payment extends JFrame {
         int count = 0;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
 
             String line;
 
@@ -376,7 +380,7 @@ public class Payment extends JFrame {
     public void deleteCard(String userName, String selectedCard) {
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
             StringBuilder content = new StringBuilder();
             String line;
             boolean deleted = false;
@@ -398,23 +402,23 @@ public class Payment extends JFrame {
                 FileWriter fw = new FileWriter("cardInfo.txt");
                 fw.write(content.toString());
                 fw.close();
-                JOptionPane.showMessageDialog( Payment.this, "Card deleted successfully!" );
+                JOptionPane.showMessageDialog(Payment.this, "Card deleted successfully!");
                 paymentMethodField.removeItem(selectedCard);
 
             } else {
-                JOptionPane.showMessageDialog( Payment.this, "Card not found!");
+                JOptionPane.showMessageDialog(Payment.this, "Card not found!");
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(Payment.this,"Error deleting card!");
+            JOptionPane.showMessageDialog(Payment.this, "Error deleting card!");
         }
     }
 
-    public void depositMoney(String userName,String selectedCard,String enteredPin,double amount) {
+    public void depositMoney(String userName, String selectedCard, String enteredPin, double amount) {
 
         try {
-            BufferedReader br =new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
             StringBuilder content = new StringBuilder();
             String line;
             boolean found = false;
@@ -423,11 +427,11 @@ public class Payment extends JFrame {
                     continue;
                 }
                 String[] data = line.split("\\|");
-                if (data.length >=5 && data[0].equals(userName) && data[1].equals(selectedCard)) {
+                if (data.length >= 5 && data[0].equals(userName) && data[1].equals(selectedCard)) {
                     String savedPin = data[3];
                     if (!savedPin.equals(enteredPin)) {
                         br.close();
-                        JOptionPane.showMessageDialog(Payment.this,"Incorrect PIN!");
+                        JOptionPane.showMessageDialog(Payment.this, "Incorrect PIN!");
                         return;
                     }
                     double oldBalance = Double.parseDouble(data[4]);
@@ -442,21 +446,21 @@ public class Payment extends JFrame {
             br.close();
 
             if (found) {
-                FileWriter fw = new FileWriter("cardInfo.txt");
+                FileWriter fw = new FileWriter(Welcome.CARD_FILE);
                 fw.write(content.toString());
                 fw.close();
-                JOptionPane.showMessageDialog(Payment.this,"Deposit successful!\n" +"Amount: " + amount);
+                JOptionPane.showMessageDialog(Payment.this, "Deposit successful!\n" + "Amount: " + amount);
 
             } else {
 
-                JOptionPane.showMessageDialog(Payment.this,"Card not found!");
+                JOptionPane.showMessageDialog(Payment.this, "Card not found!");
             }
 
         } catch (Exception ex) {
 
             ex.printStackTrace();
 
-            JOptionPane.showMessageDialog( Payment.this, "Error processing deposit.");
+            JOptionPane.showMessageDialog(Payment.this, "Error processing deposit.");
         }
     }
 
@@ -464,7 +468,7 @@ public class Payment extends JFrame {
 
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
             String line;
             boolean found = false;
             while ((line = br.readLine()) != null) {
@@ -477,13 +481,13 @@ public class Payment extends JFrame {
                     String savedPin = data[3];
                     if (!savedPin.equals(enteredPin)) {
                         br.close();
-                        JOptionPane.showMessageDialog(Payment.this,"Incorrect PIN!" );
+                        JOptionPane.showMessageDialog(Payment.this, "Incorrect PIN!");
                         return;
                     }
 
                     double balance = Double.parseDouble(data[4]);
                     br.close();
-                    JOptionPane.showMessageDialog(Payment.this, "Card: " + selectedCard +"\nBalance: " + balance );
+                    JOptionPane.showMessageDialog(Payment.this, "Card: " + selectedCard + "\nBalance: " + balance);
                     return;
                 }
             }
@@ -498,14 +502,14 @@ public class Payment extends JFrame {
         } catch (Exception ex) {
 
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(Payment.this,"Error showing balance.");
+            JOptionPane.showMessageDialog(Payment.this, "Error showing balance.");
         }
     }
 
     public void payForReservation(String userName, String selectedCard, String enteredPin, double amount) {
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("cardInfo.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CARD_FILE));
             StringBuilder content = new StringBuilder();
             String line;
             boolean found = false;
@@ -519,14 +523,15 @@ public class Payment extends JFrame {
                     String savedPin = data[3];
                     if (!savedPin.equals(enteredPin)) {
                         br.close();
-                        JOptionPane.showMessageDialog(  Payment.this, "Incorrect PIN!");
+                        JOptionPane.showMessageDialog(Payment.this, "Incorrect PIN!");
                         return;
                     }
 
                     double balance = Double.parseDouble(data[4]);
                     if (balance < amount) {
                         br.close();
-                        JOptionPane.showMessageDialog( Payment.this,  "Insufficient balance!\n" + "Required: " + amount + "\nAvailable: " + balance);
+                        JOptionPane.showMessageDialog(Payment.this,
+                                "Insufficient balance!\n" + "Required: " + amount + "\nAvailable: " + balance);
 
                         return;
                     }
@@ -541,31 +546,31 @@ public class Payment extends JFrame {
 
             br.close();
             if (!found) {
-                JOptionPane.showMessageDialog(Payment.this,"Card not found!");
+                JOptionPane.showMessageDialog(Payment.this, "Card not found!");
                 return;
             }
 
-            FileWriter fw = new FileWriter("cardInfo.txt");
+            FileWriter fw = new FileWriter(Welcome.CARD_FILE);
             fw.write(content.toString());
             fw.close();
 
-            saveReservation(userName,reservationRoomNumber,reservationCheckIn,reservationCheckOut);
+            saveReservation(userName, reservationRoomNumber, reservationCheckIn, reservationCheckOut);
 
             savePaymentRecord(
-                userName,
-                reservationRoomNumber,
-                amount,
-                selectedCard
-            );
+                    userName,
+                    reservationRoomNumber,
+                    amount,
+                    selectedCard);
 
             updateRoomAvailability(reservationRoomNumber);
 
-            JOptionPane.showMessageDialog(Payment.this,"Payment successful!\n" +"Amount: " + amount +"\nRoom " + reservationRoomNumber + " is now occupied.");
+            JOptionPane.showMessageDialog(Payment.this, "Payment successful!\n" + "Amount: " + amount + "\nRoom "
+                    + reservationRoomNumber + " is now occupied.");
 
             setVisible(false);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(Payment.this,"Error processing payment.");
+            JOptionPane.showMessageDialog(Payment.this, "Error processing payment.");
         }
     }
 
@@ -573,7 +578,7 @@ public class Payment extends JFrame {
 
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("room.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.ROOM_FILE));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
@@ -589,7 +594,7 @@ public class Payment extends JFrame {
                 content.append(System.lineSeparator());
             }
             br.close();
-            FileWriter fw = new FileWriter("room.txt");
+            FileWriter fw = new FileWriter(Welcome.ROOM_FILE);
             fw.write(content.toString());
             fw.close();
 
@@ -603,55 +608,13 @@ public class Payment extends JFrame {
 
         try {
 
-            FileWriter fw = new FileWriter("reservation.txt", true);
-
-            fw.write(
-                userName + "|" +
-                roomNumber + "|" +
-                checkInDate + "|" +
-                checkOutDate
-            );
-
-            fw.write(System.lineSeparator());
-
-            fw.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            JOptionPane.showMessageDialog(
-                Payment.this,
-                "Error saving reservation."
-            );
-        }
-    }
-
-    public void savePaymentRecord(
-        String userName,
-        String roomNumber,
-        double amount,
-        String paymentMethod) {
-
-        try {
-
-            FileWriter fw =
-                    new FileWriter("payment.txt", true);
-
-            String date =
-                    java.time.LocalDate.now().format(
-                            java.time.format.DateTimeFormatter.ofPattern(
-                                    "dd/MM/yy"
-                            )
-                    );
+            FileWriter fw = new FileWriter(Welcome.RESERVATION_FILE, true);
 
             fw.write(
                     userName + "|" +
-                    roomNumber + "|" +
-                    amount + "|" +
-                    paymentMethod + "|" +
-                    date
-            );
+                            roomNumber + "|" +
+                            checkInDate + "|" +
+                            checkOutDate);
 
             fw.write(System.lineSeparator());
 
@@ -663,13 +626,47 @@ public class Payment extends JFrame {
 
             JOptionPane.showMessageDialog(
                     Payment.this,
-                    "Error saving payment record."
-            );
+                    "Error saving reservation.");
         }
     }
 
-    public static void main(String[] args){
-        new Payment(-1,"-1","-1","-1");
+    public void savePaymentRecord(
+            String userName,
+            String roomNumber,
+            double amount,
+            String paymentMethod) {
+
+        try {
+
+            FileWriter fw = new FileWriter(Welcome.PAYMENT_FILE, true);
+
+            String date = java.time.LocalDate.now().format(
+                    java.time.format.DateTimeFormatter.ofPattern(
+                            "dd/MM/yy"));
+
+            fw.write(
+                    userName + "|" +
+                            roomNumber + "|" +
+                            amount + "|" +
+                            paymentMethod + "|" +
+                            date);
+
+            fw.write(System.lineSeparator());
+
+            fw.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(
+                    Payment.this,
+                    "Error saving payment record.");
+        }
+    }
+
+    public static void main(String[] args) {
+        new Payment(-1, "-1", "-1", "-1");
     }
 
 }

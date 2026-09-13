@@ -1,76 +1,78 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.auth;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
-public class Login extends JFrame implements ActionListener{
+import Hotel.Reservation.System.view.Welcome;
+import Hotel.Reservation.System.view.admin.Admin_Dashboard;
+import Hotel.Reservation.System.view.user.User_Dashboard;
+
+public class Login extends JFrame implements ActionListener {
 
     JTextField usernameField;
     JPasswordField passwordField;
-    JButton login,exit,registration;
+    JButton login, exit, registration;
 
-    Login(){
+    public Login() {
 
         JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setBounds(131,220,200,40);
-        usernameLabel.setFont(new Font("Arial",Font.BOLD,32));
+        usernameLabel.setBounds(131, 220, 200, 40);
+        usernameLabel.setFont(new Font("Arial", Font.BOLD, 32));
         usernameLabel.setForeground(Color.WHITE);
         add(usernameLabel);
 
         JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setBounds(131,385,200,40);
-        passwordLabel.setFont(new Font("Arial",Font.BOLD,32));
+        passwordLabel.setBounds(131, 385, 200, 40);
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 32));
         passwordLabel.setForeground(Color.WHITE);
         add(passwordLabel);
 
         usernameField = new JTextField();
-        usernameField.setBounds(331,220,200,40);
-        usernameField.setFont(new Font("Arial",Font.PLAIN,32));
+        usernameField.setBounds(331, 220, 200, 40);
+        usernameField.setFont(new Font("Arial", Font.PLAIN, 32));
         usernameField.setForeground(Color.WHITE);
         usernameField.setBackground(Color.BLACK);
         add(usernameField);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(331,385,200,40);
-        passwordField.setFont(new Font("Arial",Font.PLAIN,32));
+        passwordField.setBounds(331, 385, 200, 40);
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 32));
         passwordField.setForeground(Color.WHITE);
         passwordField.setBackground(Color.BLACK);
         add(passwordField);
 
-
-        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/Logo.png"));
+        ImageIcon imageIcon = new ImageIcon(Welcome.LOGO_ICON);
         Image scaledImage = imageIcon.getImage().getScaledInstance(455, 500, Image.SCALE_DEFAULT);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
         JLabel label = new JLabel(scaledIcon);
-        label.setBounds(531,100,455,500);
+        label.setBounds(531, 100, 455, 500);
         add(label);
 
         login = new JButton("Login");
-        login.setBounds(131,610,240,60);
-        login.setFont(new Font("Arial",Font.BOLD,32));
+        login.setBounds(131, 610, 240, 60);
+        login.setFont(new Font("Arial", Font.BOLD, 32));
         login.setForeground(Color.WHITE);
-        login.setBackground(new Color(235,173,51));
+        login.setBackground(new Color(235, 173, 51));
         login.addActionListener(this);
         add(login);
 
         exit = new JButton("Exit");
-        exit.setBounds(391,610,240,60);
-        exit.setFont(new Font("Arial",Font.BOLD,32));
+        exit.setBounds(391, 610, 240, 60);
+        exit.setFont(new Font("Arial", Font.BOLD, 32));
         exit.setForeground(Color.WHITE);
-        exit.setBackground(new Color(235,173,51));
+        exit.setBackground(new Color(235, 173, 51));
         exit.addActionListener(this);
         add(exit);
 
         registration = new JButton("Registration");
-        registration.setBounds(651,610,240,60);
-        registration.setFont(new Font("Arial",Font.BOLD,32));
+        registration.setBounds(651, 610, 240, 60);
+        registration.setFont(new Font("Arial", Font.BOLD, 32));
         registration.setForeground(Color.WHITE);
-        registration.setBackground(new Color(235,173,51));
+        registration.setBackground(new Color(235, 173, 51));
         registration.addActionListener(this);
         add(registration);
-
 
         getContentPane().setBackground(Color.BLACK);
 
@@ -82,13 +84,13 @@ public class Login extends JFrame implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == login){
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == login) {
             loginUser();
-        } else if(e.getSource() == registration){
+        } else if (e.getSource() == registration) {
             setVisible(false);
             new Registration();
-        } else{
+        } else {
             System.exit(0);
         }
     }
@@ -98,25 +100,26 @@ public class Login extends JFrame implements ActionListener{
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
 
-        if(username.isEmpty() || password.isEmpty()){
-            JOptionPane.showMessageDialog(this,"Please enter username and password!","Login Error",JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter username and password!", "Login Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         boolean loginSuccessful = false;
         String userRole = "";
 
-        try{
+        try {
 
-            File file = new File("users.txt");
+            File file = new File(Welcome.USERS_FILE);
 
-            if(file.exists()){
+            if (file.exists()) {
                 BufferedReader reader = new BufferedReader(new FileReader(file));
                 String line;
-                while((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null) {
                     String[] data = line.split("\\|");
-                    if(data.length == 4){
-                        if(data[0].equals(username) && data[2].equals(password)){
+                    if (data.length == 4) {
+                        if (data[0].equals(username) && data[2].equals(password)) {
                             loginSuccessful = true;
                             userRole = data[3];
                             break;
@@ -126,34 +129,37 @@ public class Login extends JFrame implements ActionListener{
                 reader.close();
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(loginSuccessful){
-            JOptionPane.showMessageDialog(this,"Login Successful!\nRole: " + userRole,"Success",JOptionPane.INFORMATION_MESSAGE);
+        if (loginSuccessful) {
+            JOptionPane.showMessageDialog(this, "Login Successful!\nRole: " + userRole, "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
-            try{
-                FileWriter fw = new FileWriter("currentSession.txt");
+            try {
+                FileWriter fw = new FileWriter(Welcome.CURRENT_SESSION_FILE);
                 String line = username + "|" + userRole;
                 fw.write(line);
                 fw.close();
 
-            } catch(IOException e){
-                JOptionPane.showMessageDialog(this,"Login failed! currentSession.txt not found","Error",JOptionPane.ERROR_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Login failed! currentSession.txt not found", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if(userRole.contains("User")){
+            if (userRole.contains("User")) {
                 new User_Dashboard();
-            } else if(userRole.contains("Admin")){
+            } else if (userRole.contains("Admin")) {
                 new Admin_Dashboard();
             }
         } else {
-            JOptionPane.showMessageDialog(this,"Invalid username or password!","Login Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Invalid username or password!", "Login Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new Login();
     }
 

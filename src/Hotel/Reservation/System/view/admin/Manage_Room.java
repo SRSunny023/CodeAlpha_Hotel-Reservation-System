@@ -1,4 +1,4 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.admin;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,9 +6,11 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import Hotel.Reservation.System.view.Welcome;
+
 public class Manage_Room extends JFrame {
 
-    Manage_Room(){
+    Manage_Room() {
 
         JLabel title = new JLabel("Manage Room");
         title.setBounds(280, 20, 250, 40);
@@ -33,7 +35,7 @@ public class Manage_Room extends JFrame {
         categoryLabel.setForeground(Color.WHITE);
         add(categoryLabel);
 
-        JComboBox<String> categoryBox = new JComboBox<>(new String[]{"All", "Standard", "Deluxe", "Suite"});
+        JComboBox<String> categoryBox = new JComboBox<>(new String[] { "All", "Standard", "Deluxe", "Suite" });
         categoryBox.setBounds(430, 85, 150, 30);
         categoryBox.setFont(new Font("Arial", Font.PLAIN, 16));
         add(categoryBox);
@@ -44,7 +46,7 @@ public class Manage_Room extends JFrame {
         bedLabel.setForeground(Color.WHITE);
         add(bedLabel);
 
-        JComboBox<String> bedBox = new JComboBox<>(new String[]{"All", "Single Bed", "Double Bed", "King", "Twin"});
+        JComboBox<String> bedBox = new JComboBox<>(new String[] { "All", "Single Bed", "Double Bed", "King", "Twin" });
         bedBox.setBounds(180, 130, 120, 30);
         bedBox.setFont(new Font("Arial", Font.PLAIN, 16));
         add(bedBox);
@@ -55,7 +57,7 @@ public class Manage_Room extends JFrame {
         availabilityLabel.setForeground(Color.WHITE);
         add(availabilityLabel);
 
-        JComboBox<String> availabilityBox = new JComboBox<>(new String[]{"All", "Available", "Maintenance"});
+        JComboBox<String> availabilityBox = new JComboBox<>(new String[] { "All", "Available", "Maintenance" });
         availabilityBox.setBounds(430, 130, 150, 30);
         availabilityBox.setFont(new Font("Arial", Font.PLAIN, 16));
         add(availabilityBox);
@@ -67,10 +69,10 @@ public class Manage_Room extends JFrame {
         searchBtn.setBackground(Color.BLACK);
         add(searchBtn);
 
-        String columns[] = {"Room Number", "Category", "Bed Type", "Price", "Availability"};
-        DefaultTableModel model = new DefaultTableModel(columns,0){
+        String columns[] = { "Room Number", "Category", "Bed Type", "Price", "Availability" };
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
@@ -84,7 +86,7 @@ public class Manage_Room extends JFrame {
         scrollPane.setBounds(40, 190, 665, 350);
         add(scrollPane);
 
-        loadRooms(model,"All","All","All", "All");
+        loadRooms(model, "All", "All", "All", "All");
 
         searchBtn.addActionListener(new ActionListener() {
             @Override
@@ -94,11 +96,11 @@ public class Manage_Room extends JFrame {
                 String category = categoryBox.getSelectedItem().toString();
                 String bedType = bedBox.getSelectedItem().toString();
                 String availability = availabilityBox.getSelectedItem().toString();
-                if(roomNumber.isEmpty()) {
+                if (roomNumber.isEmpty()) {
                     roomNumber = "All";
                 }
                 model.setRowCount(0);
-                loadRooms(model,roomNumber,category,bedType,availability);
+                loadRooms(model, roomNumber, category, bedType, availability);
             }
 
         });
@@ -113,14 +115,16 @@ public class Manage_Room extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
-                if(selectedRow==-1){
-                    JOptionPane.showMessageDialog(Manage_Room.this, "Please select a room first!", "Warning", JOptionPane.WARNING_MESSAGE);
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(Manage_Room.this, "Please select a room first!", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                String roomNumber = model.getValueAt(selectedRow,0).toString();
+                String roomNumber = model.getValueAt(selectedRow, 0).toString();
                 String availability = model.getValueAt(selectedRow, 4).toString();
                 if (availability.equalsIgnoreCase("Occupied")) {
-                    JOptionPane.showMessageDialog(Manage_Room.this,"Occupied rooms cannot be edited!","Warning",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(Manage_Room.this, "Occupied rooms cannot be edited!", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 setVisible(false);
@@ -144,36 +148,41 @@ public class Manage_Room extends JFrame {
         getContentPane().setBackground(Color.BLACK);
         setUndecorated(true);
         setLayout(null);
-        setLocation(Welcome.X_POSITION + 280,Welcome.Y_POSITION + 2);
+        setLocation(Welcome.X_POSITION + 280, Welcome.Y_POSITION + 2);
         setSize(745, 767);
         setVisible(true);
 
     }
 
-    public void loadRooms(DefaultTableModel model, String selectedRoomNumber, String selectedCategory, String selectedBedType, String selectedAvailability){
-        try{
+    public void loadRooms(DefaultTableModel model, String selectedRoomNumber, String selectedCategory,
+            String selectedBedType, String selectedAvailability) {
+        try {
 
-            BufferedReader br = new BufferedReader(new FileReader("room.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.ROOM_FILE));
 
             String line;
-            while((line=br.readLine())!=null){
-                if(line.trim().isEmpty()){
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) {
                     continue;
                 }
                 String[] data = line.split("\\|");
-                if(data.length>=5){
+                if (data.length >= 5) {
                     String roomNumber = data[0];
                     String category = data[1];
                     String bedType = data[2];
                     String price = data[3];
                     String availability = data[4];
-                    boolean roomNumberMatch = selectedRoomNumber.equalsIgnoreCase("All") || roomNumber.equalsIgnoreCase(selectedRoomNumber);
-                    boolean categoryMatch = selectedCategory.equalsIgnoreCase("All") || category.equalsIgnoreCase(selectedCategory);
-                    boolean bedMatch = selectedBedType.equalsIgnoreCase("All")|| bedType.equalsIgnoreCase(selectedBedType);
-                    boolean availabilityMatch = selectedAvailability.equalsIgnoreCase("All")|| availability.equalsIgnoreCase(selectedAvailability);
+                    boolean roomNumberMatch = selectedRoomNumber.equalsIgnoreCase("All")
+                            || roomNumber.equalsIgnoreCase(selectedRoomNumber);
+                    boolean categoryMatch = selectedCategory.equalsIgnoreCase("All")
+                            || category.equalsIgnoreCase(selectedCategory);
+                    boolean bedMatch = selectedBedType.equalsIgnoreCase("All")
+                            || bedType.equalsIgnoreCase(selectedBedType);
+                    boolean availabilityMatch = selectedAvailability.equalsIgnoreCase("All")
+                            || availability.equalsIgnoreCase(selectedAvailability);
 
-                    if(roomNumberMatch && categoryMatch && bedMatch && availabilityMatch){
-                        model.addRow(new Object[]{roomNumber,category,bedType,price,availability});
+                    if (roomNumberMatch && categoryMatch && bedMatch && availabilityMatch) {
+                        model.addRow(new Object[] { roomNumber, category, bedType, price, availability });
                     }
                 }
             }
@@ -182,14 +191,14 @@ public class Manage_Room extends JFrame {
 
         } catch (FileNotFoundException e) {
 
-            JOptionPane.showMessageDialog(null,"room.txt not found!","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "room.txt not found!", "Error", JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new Manage_Room();
     }
 

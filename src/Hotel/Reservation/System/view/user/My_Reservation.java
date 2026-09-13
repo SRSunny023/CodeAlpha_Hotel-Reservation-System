@@ -1,9 +1,10 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.user;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import Hotel.Reservation.System.view.Welcome;
 
 public class My_Reservation extends JFrame {
 
@@ -50,8 +51,7 @@ public class My_Reservation extends JFrame {
 
         setLocation(
                 Welcome.X_POSITION + 280,
-                Welcome.Y_POSITION + 2
-        );
+                Welcome.Y_POSITION + 2);
 
         setSize(745, 650);
 
@@ -62,10 +62,8 @@ public class My_Reservation extends JFrame {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("currentSession.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.CURRENT_SESSION_FILE));
 
             String line = br.readLine();
 
@@ -93,10 +91,8 @@ public class My_Reservation extends JFrame {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("reservation.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.RESERVATION_FILE));
 
             String line;
 
@@ -119,10 +115,9 @@ public class My_Reservation extends JFrame {
 
                     reservationArea.append(
                             "Room Number : " + data[1] + "\n" +
-                            "Check-In    : " + data[2] + "\n" +
-                            "Check-Out   : " + data[3] + "\n" +
-                            "----------------------------------------\n\n"
-                    );
+                                    "Check-In    : " + data[2] + "\n" +
+                                    "Check-Out   : " + data[3] + "\n" +
+                                    "----------------------------------------\n\n");
                 }
             }
 
@@ -131,23 +126,20 @@ public class My_Reservation extends JFrame {
             if (!found) {
 
                 reservationArea.setText(
-                        "You don't have any reservations."
-                );
+                        "You don't have any reservations.");
             }
 
         } catch (FileNotFoundException e) {
 
             reservationArea.setText(
-                    "No reservation found."
-            );
+                    "No reservation found.");
 
         } catch (IOException e) {
 
             e.printStackTrace();
 
             reservationArea.setText(
-                    "Error reading reservations."
-            );
+                    "Error reading reservations.");
         }
     }
 

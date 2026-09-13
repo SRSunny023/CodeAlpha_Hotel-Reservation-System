@@ -1,10 +1,11 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.user;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import Hotel.Reservation.System.view.Welcome;
 
 public class Cancel_Reservation extends JFrame {
 
@@ -23,28 +24,25 @@ public class Cancel_Reservation extends JFrame {
                 "Check-Out"
         };
 
-        DefaultTableModel model =
-                new DefaultTableModel(columns, 0) {
+        DefaultTableModel model = new DefaultTableModel(columns, 0) {
 
-                    @Override
-                    public boolean isCellEditable(
-                            int row,
-                            int column) {
+            @Override
+            public boolean isCellEditable(
+                    int row,
+                    int column) {
 
-                        return false;
-                    }
-                };
+                return false;
+            }
+        };
 
         JTable table = new JTable(model);
 
         table.setFont(new Font("Arial", Font.PLAIN, 18));
         table.setRowHeight(35);
         table.getTableHeader().setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
 
-        JScrollPane scrollPane =
-                new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(table);
 
         scrollPane.setBounds(40, 100, 665, 350);
         add(scrollPane);
@@ -53,13 +51,11 @@ public class Cancel_Reservation extends JFrame {
 
         loadReservations(userName, model);
 
-        JButton cancelBtn =
-                new JButton("Cancel Selected Reservation");
+        JButton cancelBtn = new JButton("Cancel Selected Reservation");
 
         cancelBtn.setBounds(40, 500, 300, 40);
         cancelBtn.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
         cancelBtn.setForeground(Color.WHITE);
         cancelBtn.setBackground(Color.BLACK);
         add(cancelBtn);
@@ -71,67 +67,53 @@ public class Cancel_Reservation extends JFrame {
                     public void actionPerformed(
                             ActionEvent e) {
 
-                        int selectedRow =
-                                table.getSelectedRow();
+                        int selectedRow = table.getSelectedRow();
 
                         if (selectedRow == -1) {
 
                             JOptionPane.showMessageDialog(
                                     Cancel_Reservation.this,
-                                    "Please select a reservation first."
-                            );
+                                    "Please select a reservation first.");
 
                             return;
                         }
 
-                        String roomNumber =
-                                model.getValueAt(
-                                        selectedRow, 0
-                                ).toString();
+                        String roomNumber = model.getValueAt(
+                                selectedRow, 0).toString();
 
-                        String checkIn =
-                                model.getValueAt(
-                                        selectedRow, 1
-                                ).toString();
+                        String checkIn = model.getValueAt(
+                                selectedRow, 1).toString();
 
-                        String checkOut =
-                                model.getValueAt(
-                                        selectedRow, 2
-                                ).toString();
+                        String checkOut = model.getValueAt(
+                                selectedRow, 2).toString();
 
-                        int confirm =
-                                JOptionPane.showConfirmDialog(
-                                        Cancel_Reservation.this,
-                                        "Are you sure you want to cancel\n"
+                        int confirm = JOptionPane.showConfirmDialog(
+                                Cancel_Reservation.this,
+                                "Are you sure you want to cancel\n"
                                         + "the reservation for Room "
                                         + roomNumber + "?",
-                                        "Confirm Cancellation",
-                                        JOptionPane.YES_NO_OPTION
-                                );
+                                "Confirm Cancellation",
+                                JOptionPane.YES_NO_OPTION);
 
                         if (confirm != JOptionPane.YES_OPTION) {
                             return;
                         }
 
-                        boolean cancelled =
-                                cancelReservation(
-                                        userName,
-                                        roomNumber,
-                                        checkIn,
-                                        checkOut
-                                );
+                        boolean cancelled = cancelReservation(
+                                userName,
+                                roomNumber,
+                                checkIn,
+                                checkOut);
 
                         if (cancelled) {
 
                             updateRoomStatus(
                                     roomNumber,
-                                    "Available"
-                            );
+                                    "Available");
 
                             JOptionPane.showMessageDialog(
                                     Cancel_Reservation.this,
-                                    "Reservation cancelled successfully."
-                            );
+                                    "Reservation cancelled successfully.");
 
                             model.removeRow(selectedRow);
 
@@ -139,20 +121,16 @@ public class Cancel_Reservation extends JFrame {
 
                             JOptionPane.showMessageDialog(
                                     Cancel_Reservation.this,
-                                    "Could not cancel reservation."
-                            );
+                                    "Could not cancel reservation.");
                         }
                     }
-                }
-        );
+                });
 
-        JButton backBtn =
-                new JButton("Back");
+        JButton backBtn = new JButton("Back");
 
         backBtn.setBounds(505, 500, 200, 40);
         backBtn.setFont(
-                new Font("Arial", Font.BOLD, 18)
-        );
+                new Font("Arial", Font.BOLD, 18));
         backBtn.setForeground(Color.WHITE);
         backBtn.setBackground(Color.BLACK);
         add(backBtn);
@@ -166,8 +144,7 @@ public class Cancel_Reservation extends JFrame {
 
                         setVisible(false);
                     }
-                }
-        );
+                });
 
         getContentPane().setBackground(Color.BLACK);
 
@@ -176,23 +153,19 @@ public class Cancel_Reservation extends JFrame {
 
         setLocation(
                 Welcome.X_POSITION + 280,
-                Welcome.Y_POSITION + 2
-        );
+                Welcome.Y_POSITION + 2);
 
         setSize(745, 600);
 
         setVisible(true);
     }
 
-
     public String loadUserName() {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("currentSession.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.CURRENT_SESSION_FILE));
 
             String line = br.readLine();
 
@@ -204,8 +177,7 @@ public class Cancel_Reservation extends JFrame {
                 return "";
             }
 
-            String[] parts =
-                    line.split("\\|");
+            String[] parts = line.split("\\|");
 
             return parts[0];
 
@@ -216,17 +188,14 @@ public class Cancel_Reservation extends JFrame {
         }
     }
 
-
     public void loadReservations(
             String userName,
             DefaultTableModel model) {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("reservation.txt")
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(Welcome.RESERVATION_FILE));
 
             String line;
 
@@ -237,19 +206,17 @@ public class Cancel_Reservation extends JFrame {
                 }
 
                 // username | roomNumber | checkIn | checkOut
-                String[] data =
-                        line.split("\\|");
+                String[] data = line.split("\\|");
 
                 if (data.length >= 4 &&
                         data[0].equals(userName)) {
 
                     model.addRow(
-                            new Object[]{
+                            new Object[] {
                                     data[1],
                                     data[2],
                                     data[3]
-                            }
-                    );
+                            });
                 }
             }
 
@@ -261,8 +228,7 @@ public class Cancel_Reservation extends JFrame {
                     this,
                     "reservation.txt not found!",
                     "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+                    JOptionPane.ERROR_MESSAGE);
 
         } catch (IOException e) {
 
@@ -270,32 +236,25 @@ public class Cancel_Reservation extends JFrame {
         }
     }
 
-
     public boolean cancelReservation(
             String userName,
             String roomNumber,
             String checkIn,
             String checkOut) {
 
-        File inputFile =
-                new File("reservation.txt");
+        File inputFile = new File(Welcome.RESERVATION_FILE);
 
-        File tempFile =
-                new File("reservation_temp.txt");
+        File tempFile = new File(Welcome.DATA_FOLDER + "reservation_temp.txt");
 
         boolean found = false;
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader(inputFile)
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(inputFile));
 
-            BufferedWriter bw =
-                    new BufferedWriter(
-                            new FileWriter(tempFile)
-                    );
+            BufferedWriter bw = new BufferedWriter(
+                    new FileWriter(tempFile));
 
             String line;
 
@@ -305,8 +264,7 @@ public class Cancel_Reservation extends JFrame {
                     continue;
                 }
 
-                String[] data =
-                        line.split("\\|");
+                String[] data = line.split("\\|");
 
                 if (data.length >= 4 &&
                         data[0].equals(userName) &&
@@ -356,28 +314,21 @@ public class Cancel_Reservation extends JFrame {
         }
     }
 
-
     public void updateRoomStatus(
             String roomNumber,
             String newStatus) {
 
         try {
 
-            File inputFile =
-                    new File("room.txt");
+            File inputFile = new File(Welcome.ROOM_FILE);
 
-            File tempFile =
-                    new File("room_temp.txt");
+            File tempFile = new File(Welcome.DATA_FOLDER + "room_temp.txt");
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader(inputFile)
-                    );
+            BufferedReader br = new BufferedReader(
+                    new FileReader(inputFile));
 
-            BufferedWriter bw =
-                    new BufferedWriter(
-                            new FileWriter(tempFile)
-                    );
+            BufferedWriter bw = new BufferedWriter(
+                    new FileWriter(tempFile));
 
             String line;
 
@@ -387,8 +338,7 @@ public class Cancel_Reservation extends JFrame {
                     continue;
                 }
 
-                String[] data =
-                        line.split("\\|");
+                String[] data = line.split("\\|");
 
                 if (data.length >= 5 &&
                         data[0].equals(roomNumber)) {
@@ -397,8 +347,7 @@ public class Cancel_Reservation extends JFrame {
 
                     line = String.join(
                             "|",
-                            data
-                    );
+                            data);
                 }
 
                 bw.write(line);
@@ -416,8 +365,7 @@ public class Cancel_Reservation extends JFrame {
 
                 JOptionPane.showMessageDialog(
                         this,
-                        "Could not update room status."
-                );
+                        "Could not update room status.");
             }
 
         } catch (Exception e) {
@@ -425,7 +373,6 @@ public class Cancel_Reservation extends JFrame {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String[] args) {
 

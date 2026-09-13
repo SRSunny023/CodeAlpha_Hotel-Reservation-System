@@ -1,18 +1,22 @@
-package Hotel.Reservation.System;
+package Hotel.Reservation.System.view.user;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import Hotel.Reservation.System.view.Welcome;
 
 public class My_Portfolio extends JFrame {
 
-    My_Portfolio(){
+    My_Portfolio() {
 
         String userName = loadUserName();
         String[] profile = new String[5];
         profile[0] = userName;
-        profile[1] = ""; profile[2] = ""; profile[3] = ""; profile[4] = "";
+        profile[1] = "";
+        profile[2] = "";
+        profile[3] = "";
+        profile[4] = "";
 
         JLabel title = new JLabel("My Profile");
         title.setBounds(280, 20, 250, 40);
@@ -68,13 +72,13 @@ public class My_Portfolio extends JFrame {
         submitBtn.setVisible(false);
         submitBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 String userFullName = fullNameField.getText();
                 String userPhoneNumber = phoneNumberField.getText();
                 String userNidNumber = nidNumberField.getText();
                 boolean updated = false;
-                try{
-                    BufferedReader br = new BufferedReader(new FileReader("userProfile.txt"));
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(Welcome.USER_PROFILE));
                     StringBuilder content = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) {
@@ -92,14 +96,15 @@ public class My_Portfolio extends JFrame {
 
                     br.close();
 
-                    if(updated){
-                        FileWriter fw = new FileWriter("userProfile.txt");
+                    if (updated) {
+                        FileWriter fw = new FileWriter(Welcome.USER_PROFILE);
                         fw.write(content.toString());
                         fw.close();
-                        JOptionPane.showMessageDialog(null,"Profile Created Successfully!","Profile",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Profile Created Successfully!", "Profile",
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
 
-                } catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 setVisible(false);
@@ -115,7 +120,7 @@ public class My_Portfolio extends JFrame {
         backBtn.setVisible(false);
         backBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
         });
@@ -128,7 +133,7 @@ public class My_Portfolio extends JFrame {
         add(editBtn);
         editBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e) {
                 fullNameField.setEditable(true);
                 phoneNumberField.setEditable(true);
                 nidNumberField.setEditable(true);
@@ -136,7 +141,7 @@ public class My_Portfolio extends JFrame {
             }
         });
 
-        if(loadProfile(userName,profile)){
+        if (loadProfile(userName, profile)) {
             fullName.setVisible(true);
             fullNameField.setVisible(true);
             phoneNumber.setVisible(true);
@@ -150,7 +155,7 @@ public class My_Portfolio extends JFrame {
             phoneNumberField.setText(profile[2]);
             nidNumberField.setText(profile[3]);
             backBtn.setVisible(true);
-        } else{
+        } else {
             fullName.setVisible(true);
             fullNameField.setVisible(true);
             phoneNumber.setVisible(true);
@@ -166,32 +171,32 @@ public class My_Portfolio extends JFrame {
 
         setUndecorated(true);
         setLayout(null);
-        setLocation(Welcome.X_POSITION + 280,Welcome.Y_POSITION + 2);
+        setLocation(Welcome.X_POSITION + 280, Welcome.Y_POSITION + 2);
         setSize(745, 767);
         setVisible(true);
     }
 
-    public boolean loadProfile(String currentUserName, String[] profile){
-        try{
+    public boolean loadProfile(String currentUserName, String[] profile) {
+        try {
 
-            BufferedReader br = new BufferedReader(new FileReader("userProfile.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.USER_PROFILE));
             String line;
-            while((line = br.readLine())!=null){
+            while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 String[] parts = line.split("\\|");
-                if(parts.length>=4){
+                if (parts.length >= 4) {
                     String userName = parts[0];
                     String fullName = parts[1];
                     String phoneNumber = parts[2];
                     String nidNumber = parts[3];
 
-                    if(userName.equals(currentUserName)){
-                        if(fullName==""){
+                    if (userName.equals(currentUserName)) {
+                        if (fullName == "") {
                             br.close();
                             return false;
-                        } else{
+                        } else {
                             br.close();
                             profile[1] = fullName;
                             profile[2] = phoneNumber;
@@ -205,28 +210,28 @@ public class My_Portfolio extends JFrame {
             br.close();
             return false;
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public String loadUserName(){
-        try{
+    public String loadUserName() {
+        try {
 
-            BufferedReader br = new BufferedReader(new FileReader("currentSession.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(Welcome.CURRENT_SESSION_FILE));
             String line = br.readLine();
             String[] parts = line.split("\\|");
             br.close();
             return parts[0];
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new My_Portfolio();
     }
 
